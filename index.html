@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parlance - Word Game</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="game-container">
+        <!-- Header -->
+        <header class="game-header">
+            <h1 class="game-title">Parlance</h1>
+            <div class="score-container">
+                <span class="score-label">Score</span>
+                <span class="score" id="score">0</span>
+            </div>
+        </header>
+
+        <!-- Game Area -->
+        <div class="game-area">
+            <!-- Current Word -->
+            <div class="word-container">
+                <h2 class="current-word" id="currentWord">Loading...</h2>
+                <p class="word-hint">Swipe → for correct, ← for incorrect. New word appears after each correct definition!</p>
+            </div>
+
+            <!-- Card Stack -->
+            <div class="card-stack" id="cardStack">
+                <!-- Cards will be dynamically generated here -->
+            </div>
+
+            <!-- Swipe Indicators -->
+            <div class="swipe-indicators">
+                <div class="swipe-indicator left" id="leftIndicator">
+                    <span>✗</span>
+                    <p>Incorrect</p>
+                </div>
+                <div class="swipe-indicator right" id="rightIndicator">
+                    <span>✓</span>
+                    <p>Correct</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Stats -->
+        <div class="game-stats">
+            <div class="stat">
+                <span class="stat-value" id="correct">0</span>
+                <span class="stat-label">Correct</span>
+            </div>
+            <div class="stat">
+                <span class="stat-value" id="incorrect">0</span>
+                <span class="stat-label">Incorrect</span>
+            </div>
+            <div class="stat">
+                <span class="stat-value" id="streak">0</span>
+                <span class="stat-label">Streak</span>
+            </div>
+        </div>
+
+        <!-- Game Over Modal -->
+        <div class="modal" id="gameOverModal">
+            <div class="modal-content">
+                <h2>Game Over!</h2>
+                <div class="final-stats">
+                    <p>Final Score: <span id="finalScore">0</span></p>
+                    <p>Correct: <span id="finalCorrect">0</span></p>
+                    <p>Incorrect: <span id="finalIncorrect">0</span></p>
+                    <p>Best Streak: <span id="finalStreak">0</span></p>
+                </div>
+                <button class="play-again-btn" id="playAgainBtn">Play Again</button>
+            </div>
+        </div>
+
+        <!-- Dictionary Modal -->
+        <div class="modal" id="dictionaryModal">
+            <div class="modal-content dictionary-modal">
+                <div class="dictionary-header">
+                    <h2 id="dictWord">Word</h2>
+                    <div class="pronunciation">
+                        <span id="dictPhonetic">/pronunciation/</span>
+                        <button class="audio-btn" id="audioBtn" style="display: none;">🔊</button>
+                    </div>
+                </div>
+                <div class="dictionary-content" id="dictContent">
+                    <!-- Dynamic content will be inserted here -->
+                </div>
+                <button class="continue-btn" id="continueBtn">Continue Playing</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 
