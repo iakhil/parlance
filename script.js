@@ -292,6 +292,23 @@ class Card {
 
     processSwipeResult(isCorrect) {
         const wasCorrectDefinition = this.isCorrect;
+        const swipeDirection = this.element.classList.contains('swipe-right') ? 'right' : 'left';
+        
+        // Show success animation if user swiped RIGHT on CORRECT definition
+        if (wasCorrectDefinition && swipeDirection === 'right') {
+            showSuccessAnimation();
+        }
+        
+        // Show failure animation for incorrect choices
+        if (!isCorrect) {
+            // Failure cases:
+            // 1. Swiped LEFT on CORRECT definition (missed it)
+            // 2. Swiped RIGHT on INCORRECT definition (thought it was correct)
+            if ((wasCorrectDefinition && swipeDirection === 'left') || 
+                (!wasCorrectDefinition && swipeDirection === 'right')) {
+                showFailureAnimation();
+            }
+        }
         
         if (isCorrect) {
             game.addCorrect();
@@ -475,6 +492,154 @@ function showFeedback(isCorrect) {
             document.body.removeChild(feedback);
         }
     }, 800);
+}
+
+// Success Animation Functions
+function createParticle(x, y) {
+    const particle = document.createElement('div');
+    particle.className = 'particle';
+    
+    // Random direction and distance
+    const angle = Math.random() * 2 * Math.PI;
+    const distance = 100 + Math.random() * 200;
+    const dx = Math.cos(angle) * distance;
+    const dy = Math.sin(angle) * distance;
+    
+    particle.style.left = x + 'px';
+    particle.style.top = y + 'px';
+    particle.style.setProperty('--dx', dx + 'px');
+    particle.style.setProperty('--dy', dy + 'px');
+    
+    // Random color variation
+    const colors = ['#4ecdc4', '#44a08d', '#6bcf7f', '#ffd93d'];
+    particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+    
+    document.body.appendChild(particle);
+    
+    // Start animation
+    setTimeout(() => particle.classList.add('burst'), 10);
+    
+    // Remove particle after animation
+    setTimeout(() => {
+        if (document.body.contains(particle)) {
+            document.body.removeChild(particle);
+        }
+    }, 1000);
+}
+
+function showSuccessAnimation() {
+    // Create overlay
+    const overlay = document.createElement('div');
+    overlay.className = 'success-overlay';
+    
+    // Create success icon
+    const icon = document.createElement('div');
+    icon.className = 'success-icon';
+    icon.textContent = '✓';
+    
+    // Create success text
+    const text = document.createElement('div');
+    text.className = 'success-text';
+    text.textContent = 'Excellent!';
+    
+    overlay.appendChild(icon);
+    overlay.appendChild(text);
+    document.body.appendChild(overlay);
+    
+    // Show overlay
+    setTimeout(() => overlay.classList.add('show'), 10);
+    
+    // Create particles from center
+    const centerX = window.innerWidth / 2;
+    const centerY = window.innerHeight / 2;
+    
+    // Create multiple waves of particles
+    for (let i = 0; i < 20; i++) {
+        setTimeout(() => {
+            createParticle(centerX, centerY);
+        }, i * 50);
+    }
+    
+    // Remove overlay after animation
+    setTimeout(() => {
+        if (document.body.contains(overlay)) {
+            document.body.removeChild(overlay);
+        }
+    }, 1200);
+}
+
+// Failure Animation Functions
+function createFailureParticle(x, y) {
+    const particle = document.createElement('div');
+    particle.className = 'failure-particle';
+    
+    // Random direction but mostly downward for "failure" feel
+    const angle = Math.PI/4 + Math.random() * Math.PI/2; // Between 45-135 degrees (downward)
+    const distance = 80 + Math.random() * 150;
+    const dx = Math.cos(angle) * distance * (Math.random() > 0.5 ? 1 : -1);
+    const dy = Math.sin(angle) * distance;
+    
+    particle.style.left = x + 'px';
+    particle.style.top = y + 'px';
+    particle.style.setProperty('--dx', dx + 'px');
+    particle.style.setProperty('--dy', dy + 'px');
+    
+    // Red color variations
+    const colors = ['#ff6b6b', '#ee5a52', '#ff4757', '#ff3838'];
+    particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+    
+    document.body.appendChild(particle);
+    
+    // Start animation
+    setTimeout(() => particle.classList.add('drop'), 10);
+    
+    // Remove particle after animation
+    setTimeout(() => {
+        if (document.body.contains(particle)) {
+            document.body.removeChild(particle);
+        }
+    }, 1200);
+}
+
+function showFailureAnimation() {
+    // Create overlay
+    const overlay = document.createElement('div');
+    overlay.className = 'failure-overlay';
+    
+    // Create failure icon
+    const icon = document.createElement('div');
+    icon.className = 'failure-icon';
+    icon.textContent = '✗';
+    
+    // Create failure text
+    const text = document.createElement('div');
+    text.className = 'failure-text';
+    text.textContent = 'Oops!';
+    
+    overlay.appendChild(icon);
+    overlay.appendChild(text);
+    document.body.appendChild(overlay);
+    
+    // Show overlay
+    setTimeout(() => overlay.classList.add('show'), 10);
+    
+    // Create particles from center with failure pattern
+    const centerX = window.innerWidth / 2;
+    const centerY = window.innerHeight / 2;
+    
+    // Create fewer particles with downward motion
+    for (let i = 0; i < 15; i++) {
+        setTimeout(() => {
+            createFailureParticle(centerX, centerY);
+        }, i * 60);
+    }
+    
+    // Remove overlay after animation
+    setTimeout(() => {
+        if (document.body.contains(overlay)) {
+            document.body.removeChild(overlay);
+        }
+    }, 1200);
 }
 
 // Add feedback styles dynamically
