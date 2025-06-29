@@ -493,33 +493,48 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    /* Mobile optimizations */
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-perspective: 1000px;
+    perspective: 1000px;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
 }
 
 .success-overlay.show {
     animation: successFlash 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    /* Force hardware acceleration on mobile */
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
 }
 
 @keyframes successFlash {
     0% {
         opacity: 0;
-        transform: scale(0.8);
+        transform: scale(0.8) translateZ(0);
+        -webkit-transform: scale(0.8) translateZ(0);
     }
     15% {
         opacity: 1;
-        transform: scale(1.05);
+        transform: scale(1.05) translateZ(0);
+        -webkit-transform: scale(1.05) translateZ(0);
         background: radial-gradient(circle, rgba(78, 205, 196, 0.6) 0%, rgba(68, 160, 141, 0.3) 50%, rgba(78, 205, 196, 0.1) 100%);
     }
     30% {
         opacity: 0.8;
-        transform: scale(1);
+        transform: scale(1) translateZ(0);
+        -webkit-transform: scale(1) translateZ(0);
     }
     70% {
         opacity: 0.4;
-        transform: scale(1);
+        transform: scale(1) translateZ(0);
+        -webkit-transform: scale(1) translateZ(0);
     }
     100% {
         opacity: 0;
-        transform: scale(1.1);
+        transform: scale(1.1) translateZ(0);
+        -webkit-transform: scale(1.1) translateZ(0);
     }
 }
 
@@ -528,31 +543,42 @@ body {
     color: #4ecdc4;
     text-shadow: 0 0 30px rgba(78, 205, 196, 0.8);
     animation: successIconBounce 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    /* Mobile optimizations */
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 @keyframes successIconBounce {
     0% {
-        transform: scale(0) rotate(0deg);
+        transform: scale(0) rotate(0deg) translateZ(0);
+        -webkit-transform: scale(0) rotate(0deg) translateZ(0);
         opacity: 0;
     }
     20% {
-        transform: scale(1.2) rotate(5deg);
+        transform: scale(1.2) rotate(5deg) translateZ(0);
+        -webkit-transform: scale(1.2) rotate(5deg) translateZ(0);
         opacity: 1;
     }
     40% {
-        transform: scale(0.9) rotate(-2deg);
+        transform: scale(0.9) rotate(-2deg) translateZ(0);
+        -webkit-transform: scale(0.9) rotate(-2deg) translateZ(0);
         opacity: 1;
     }
     60% {
-        transform: scale(1.05) rotate(1deg);
+        transform: scale(1.05) rotate(1deg) translateZ(0);
+        -webkit-transform: scale(1.05) rotate(1deg) translateZ(0);
         opacity: 1;
     }
     80% {
-        transform: scale(0.95) rotate(0deg);
+        transform: scale(0.95) rotate(0deg) translateZ(0);
+        -webkit-transform: scale(0.95) rotate(0deg) translateZ(0);
         opacity: 1;
     }
     100% {
-        transform: scale(1) rotate(0deg);
+        transform: scale(1) rotate(0deg) translateZ(0);
+        -webkit-transform: scale(1) rotate(0deg) translateZ(0);
         opacity: 0;
     }
 }
@@ -566,6 +592,11 @@ body {
     border-radius: 50%;
     pointer-events: none;
     opacity: 0;
+    /* Mobile optimizations */
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
 }
 
 .particle.burst {
@@ -575,11 +606,13 @@ body {
 @keyframes particleBurst {
     0% {
         opacity: 1;
-        transform: scale(1) translate(0, 0);
+        transform: scale(1) translate(0, 0) translateZ(0);
+        -webkit-transform: scale(1) translate(0, 0) translateZ(0);
     }
     100% {
         opacity: 0;
-        transform: scale(0.5) translate(var(--dx, 0), var(--dy, 0));
+        transform: scale(0.5) translate(var(--dx, 0), var(--dy, 0)) translateZ(0);
+        -webkit-transform: scale(0.5) translate(var(--dx, 0), var(--dy, 0)) translateZ(0);
     }
 }
 
@@ -588,31 +621,39 @@ body {
     position: absolute;
     top: 60%;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translateX(-50%) translateZ(0);
+    -webkit-transform: translateX(-50%) translateZ(0);
     font-size: 2rem;
     font-weight: 700;
     color: #4ecdc4;
     text-shadow: 0 0 20px rgba(78, 205, 196, 0.6);
     opacity: 0;
     animation: successTextSlide 1.2s ease-out forwards;
+    /* Mobile optimizations */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 @keyframes successTextSlide {
     0% {
         opacity: 0;
-        transform: translateX(-50%) translateY(30px);
+        transform: translateX(-50%) translateY(30px) translateZ(0);
+        -webkit-transform: translateX(-50%) translateY(30px) translateZ(0);
     }
     30% {
         opacity: 1;
-        transform: translateX(-50%) translateY(0);
+        transform: translateX(-50%) translateY(0) translateZ(0);
+        -webkit-transform: translateX(-50%) translateY(0) translateZ(0);
     }
     70% {
         opacity: 1;
-        transform: translateX(-50%) translateY(0);
+        transform: translateX(-50%) translateY(0) translateZ(0);
+        -webkit-transform: translateX(-50%) translateY(0) translateZ(0);
     }
     100% {
         opacity: 0;
-        transform: translateX(-50%) translateY(-20px);
+        transform: translateX(-50%) translateY(-20px) translateZ(0);
+        -webkit-transform: translateX(-50%) translateY(-20px) translateZ(0);
     }
 }
 
@@ -630,33 +671,48 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    /* Mobile optimizations */
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-perspective: 1000px;
+    perspective: 1000px;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
 }
 
 .failure-overlay.show {
     animation: failureFlash 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    /* Force hardware acceleration on mobile */
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
 }
 
 @keyframes failureFlash {
     0% {
         opacity: 0;
-        transform: scale(0.8);
+        transform: scale(0.8) translateZ(0);
+        -webkit-transform: scale(0.8) translateZ(0);
     }
     15% {
         opacity: 1;
-        transform: scale(1.05);
+        transform: scale(1.05) translateZ(0);
+        -webkit-transform: scale(1.05) translateZ(0);
         background: radial-gradient(circle, rgba(255, 107, 107, 0.6) 0%, rgba(238, 90, 82, 0.3) 50%, rgba(255, 107, 107, 0.1) 100%);
     }
     30% {
         opacity: 0.8;
-        transform: scale(1);
+        transform: scale(1) translateZ(0);
+        -webkit-transform: scale(1) translateZ(0);
     }
     70% {
         opacity: 0.4;
-        transform: scale(1);
+        transform: scale(1) translateZ(0);
+        -webkit-transform: scale(1) translateZ(0);
     }
     100% {
         opacity: 0;
-        transform: scale(1.1);
+        transform: scale(1.1) translateZ(0);
+        -webkit-transform: scale(1.1) translateZ(0);
     }
 }
 
@@ -665,39 +721,52 @@ body {
     color: #ff6b6b;
     text-shadow: 0 0 30px rgba(255, 107, 107, 0.8);
     animation: failureIconShake 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    /* Mobile optimizations */
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 @keyframes failureIconShake {
     0% {
-        transform: scale(0) rotate(0deg);
+        transform: scale(0) rotate(0deg) translateZ(0);
+        -webkit-transform: scale(0) rotate(0deg) translateZ(0);
         opacity: 0;
     }
     20% {
-        transform: scale(1.2) rotate(-10deg);
+        transform: scale(1.2) rotate(-10deg) translateZ(0);
+        -webkit-transform: scale(1.2) rotate(-10deg) translateZ(0);
         opacity: 1;
     }
     30% {
-        transform: scale(0.9) rotate(8deg);
+        transform: scale(0.9) rotate(8deg) translateZ(0);
+        -webkit-transform: scale(0.9) rotate(8deg) translateZ(0);
         opacity: 1;
     }
     40% {
-        transform: scale(1.1) rotate(-6deg);
+        transform: scale(1.1) rotate(-6deg) translateZ(0);
+        -webkit-transform: scale(1.1) rotate(-6deg) translateZ(0);
         opacity: 1;
     }
     50% {
-        transform: scale(0.95) rotate(4deg);
+        transform: scale(0.95) rotate(4deg) translateZ(0);
+        -webkit-transform: scale(0.95) rotate(4deg) translateZ(0);
         opacity: 1;
     }
     60% {
-        transform: scale(1.05) rotate(-2deg);
+        transform: scale(1.05) rotate(-2deg) translateZ(0);
+        -webkit-transform: scale(1.05) rotate(-2deg) translateZ(0);
         opacity: 1;
     }
     80% {
-        transform: scale(0.98) rotate(1deg);
+        transform: scale(0.98) rotate(1deg) translateZ(0);
+        -webkit-transform: scale(0.98) rotate(1deg) translateZ(0);
         opacity: 1;
     }
     100% {
-        transform: scale(1) rotate(0deg);
+        transform: scale(1) rotate(0deg) translateZ(0);
+        -webkit-transform: scale(1) rotate(0deg) translateZ(0);
         opacity: 0;
     }
 }
@@ -711,6 +780,11 @@ body {
     border-radius: 50%;
     pointer-events: none;
     opacity: 0;
+    /* Mobile optimizations */
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
 }
 
 .failure-particle.drop {
@@ -720,11 +794,13 @@ body {
 @keyframes failureParticleDrop {
     0% {
         opacity: 1;
-        transform: scale(1) translate(0, 0);
+        transform: scale(1) translate(0, 0) translateZ(0);
+        -webkit-transform: scale(1) translate(0, 0) translateZ(0);
     }
     100% {
         opacity: 0;
-        transform: scale(0.3) translate(var(--dx, 0), var(--dy, 0));
+        transform: scale(0.3) translate(var(--dx, 0), var(--dy, 0)) translateZ(0);
+        -webkit-transform: scale(0.3) translate(var(--dx, 0), var(--dy, 0)) translateZ(0);
     }
 }
 
@@ -733,34 +809,60 @@ body {
     position: absolute;
     top: 60%;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translateX(-50%) translateZ(0);
+    -webkit-transform: translateX(-50%) translateZ(0);
     font-size: 2rem;
     font-weight: 700;
     color: #ff6b6b;
     text-shadow: 0 0 20px rgba(255, 107, 107, 0.6);
     opacity: 0;
     animation: failureTextWobble 1.2s ease-out forwards;
+    /* Mobile optimizations */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 @keyframes failureTextWobble {
     0% {
         opacity: 0;
-        transform: translateX(-50%) translateY(30px) rotate(-3deg);
+        transform: translateX(-50%) translateY(30px) rotate(-3deg) translateZ(0);
+        -webkit-transform: translateX(-50%) translateY(30px) rotate(-3deg) translateZ(0);
     }
     30% {
         opacity: 1;
-        transform: translateX(-50%) translateY(0) rotate(2deg);
+        transform: translateX(-50%) translateY(0) rotate(2deg) translateZ(0);
+        -webkit-transform: translateX(-50%) translateY(0) rotate(2deg) translateZ(0);
     }
     50% {
         opacity: 1;
-        transform: translateX(-50%) translateY(0) rotate(-1deg);
+        transform: translateX(-50%) translateY(0) rotate(-1deg) translateZ(0);
+        -webkit-transform: translateX(-50%) translateY(0) rotate(-1deg) translateZ(0);
     }
     70% {
         opacity: 1;
-        transform: translateX(-50%) translateY(0) rotate(0deg);
+        transform: translateX(-50%) translateY(0) rotate(0deg) translateZ(0);
+        -webkit-transform: translateX(-50%) translateY(0) rotate(0deg) translateZ(0);
     }
     100% {
         opacity: 0;
-        transform: translateX(-50%) translateY(-20px) rotate(0deg);
+        transform: translateX(-50%) translateY(-20px) rotate(0deg) translateZ(0);
+        -webkit-transform: translateX(-50%) translateY(-20px) rotate(0deg) translateZ(0);
+    }
+}
+
+/* Mobile-specific adjustments */
+@media (max-width: 480px) {
+    .success-icon, .failure-icon {
+        font-size: 6rem; /* Slightly smaller on mobile */
+    }
+    
+    .success-text, .failure-text {
+        font-size: 1.5rem; /* Smaller text on mobile */
+    }
+    
+    /* Reduce particle count and size on mobile for performance */
+    .particle, .failure-particle {
+        width: 6px;
+        height: 6px;
     }
 } 

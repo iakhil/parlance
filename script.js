@@ -296,7 +296,7 @@ class Card {
         
         // Show success animation if user swiped RIGHT on CORRECT definition
         if (wasCorrectDefinition && swipeDirection === 'right') {
-            showSuccessAnimation();
+            showSuccessAnimationWithFallback();
         }
         
         // Show failure animation for incorrect choices
@@ -306,7 +306,7 @@ class Card {
             // 2. Swiped RIGHT on INCORRECT definition (thought it was correct)
             if ((wasCorrectDefinition && swipeDirection === 'left') || 
                 (!wasCorrectDefinition && swipeDirection === 'right')) {
-                showFailureAnimation();
+                showFailureAnimationWithFallback();
             }
         }
         
@@ -494,6 +494,144 @@ function showFeedback(isCorrect) {
     }, 800);
 }
 
+// Mobile animation detection and fallback
+function isMobileDevice() {
+    return window.innerWidth <= 480 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+}
+
+function hasAnimationSupport() {
+    const testEl = document.createElement('div');
+    testEl.style.cssText = 'animation: test 1s;';
+    return testEl.style.animation !== '';
+}
+
+// Simple fallback animation for mobile devices with limited animation support
+function showSimpleSuccessAnimation() {
+    console.log('Showing simple success animation fallback');
+    
+    const feedback = document.createElement('div');
+    feedback.className = 'simple-success-feedback';
+    feedback.innerHTML = '<div style="font-size: 4rem; color: #4ecdc4;">✓</div><div style="font-size: 1.5rem; color: #4ecdc4; margin-top: 10px;">Excellent!</div>';
+    
+    // Style the feedback
+    feedback.style.cssText = `
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 10000;
+        text-align: center;
+        pointer-events: none;
+        background: rgba(0, 0, 0, 0.8);
+        border-radius: 15px;
+        padding: 30px;
+        border: 2px solid #4ecdc4;
+        opacity: 0;
+        transition: opacity 0.3s ease, transform 0.3s ease;
+    `;
+    
+    document.body.appendChild(feedback);
+    
+    // Animate in
+    setTimeout(() => {
+        feedback.style.opacity = '1';
+        feedback.style.transform = 'translate(-50%, -50%) scale(1.1)';
+    }, 50);
+    
+    // Animate out
+    setTimeout(() => {
+        feedback.style.opacity = '0';
+        feedback.style.transform = 'translate(-50%, -50%) scale(0.9)';
+    }, 800);
+    
+    // Remove
+    setTimeout(() => {
+        if (document.body.contains(feedback)) {
+            document.body.removeChild(feedback);
+        }
+    }, 1100);
+}
+
+function showSimpleFailureAnimation() {
+    console.log('Showing simple failure animation fallback');
+    
+    const feedback = document.createElement('div');
+    feedback.className = 'simple-failure-feedback';
+    feedback.innerHTML = '<div style="font-size: 4rem; color: #ff6b6b;">✗</div><div style="font-size: 1.5rem; color: #ff6b6b; margin-top: 10px;">Oops!</div>';
+    
+    // Style the feedback
+    feedback.style.cssText = `
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 10000;
+        text-align: center;
+        pointer-events: none;
+        background: rgba(0, 0, 0, 0.8);
+        border-radius: 15px;
+        padding: 30px;
+        border: 2px solid #ff6b6b;
+        opacity: 0;
+        transition: opacity 0.3s ease, transform 0.3s ease;
+    `;
+    
+    document.body.appendChild(feedback);
+    
+    // Animate in with slight shake
+    setTimeout(() => {
+        feedback.style.opacity = '1';
+        feedback.style.transform = 'translate(-50%, -50%) scale(1.1)';
+    }, 50);
+    
+    // Add shake effect
+    setTimeout(() => {
+        feedback.style.transform = 'translate(-50%, -50%) scale(1.1) rotate(2deg)';
+    }, 150);
+    
+    setTimeout(() => {
+        feedback.style.transform = 'translate(-50%, -50%) scale(1.1) rotate(-2deg)';
+    }, 250);
+    
+    setTimeout(() => {
+        feedback.style.transform = 'translate(-50%, -50%) scale(1.1) rotate(0deg)';
+    }, 350);
+    
+    // Animate out
+    setTimeout(() => {
+        feedback.style.opacity = '0';
+        feedback.style.transform = 'translate(-50%, -50%) scale(0.9)';
+    }, 800);
+    
+    // Remove
+    setTimeout(() => {
+        if (document.body.contains(feedback)) {
+            document.body.removeChild(feedback);
+        }
+    }, 1100);
+}
+
+// Enhanced animation functions with fallback support
+function showSuccessAnimationWithFallback() {
+    const useFallback = isMobileDevice() && !hasAnimationSupport();
+    
+    if (useFallback) {
+        showSimpleSuccessAnimation();
+    } else {
+        showSuccessAnimation();
+    }
+}
+
+function showFailureAnimationWithFallback() {
+    const useFallback = isMobileDevice() && !hasAnimationSupport();
+    
+    if (useFallback) {
+        showSimpleFailureAnimation();
+    } else {
+        showFailureAnimation();
+    }
+}
+
 // Success Animation Functions
 function createParticle(x, y) {
     const particle = document.createElement('div');
@@ -528,6 +666,8 @@ function createParticle(x, y) {
 }
 
 function showSuccessAnimation() {
+    console.log('Triggering success animation'); // Debug log
+    
     // Create overlay
     const overlay = document.createElement('div');
     overlay.className = 'success-overlay';
@@ -546,15 +686,25 @@ function showSuccessAnimation() {
     overlay.appendChild(text);
     document.body.appendChild(overlay);
     
-    // Show overlay
-    setTimeout(() => overlay.classList.add('show'), 10);
+    // Force a reflow to ensure the element is rendered
+    overlay.offsetHeight;
+    
+    // Show overlay with slight delay to ensure DOM is ready
+    setTimeout(() => {
+        overlay.classList.add('show');
+        console.log('Success animation show class added'); // Debug log
+    }, 10);
     
     // Create particles from center
     const centerX = window.innerWidth / 2;
     const centerY = window.innerHeight / 2;
     
+    // Reduce particle count on mobile for better performance
+    const isMobile = window.innerWidth <= 480;
+    const particleCount = isMobile ? 10 : 20;
+    
     // Create multiple waves of particles
-    for (let i = 0; i < 20; i++) {
+    for (let i = 0; i < particleCount; i++) {
         setTimeout(() => {
             createParticle(centerX, centerY);
         }, i * 50);
@@ -564,6 +714,7 @@ function showSuccessAnimation() {
     setTimeout(() => {
         if (document.body.contains(overlay)) {
             document.body.removeChild(overlay);
+            console.log('Success animation overlay removed'); // Debug log
         }
     }, 1200);
 }
@@ -590,6 +741,9 @@ function createFailureParticle(x, y) {
     
     document.body.appendChild(particle);
     
+    // Force a reflow
+    particle.offsetHeight;
+    
     // Start animation
     setTimeout(() => particle.classList.add('drop'), 10);
     
@@ -602,6 +756,8 @@ function createFailureParticle(x, y) {
 }
 
 function showFailureAnimation() {
+    console.log('Triggering failure animation'); // Debug log
+    
     // Create overlay
     const overlay = document.createElement('div');
     overlay.className = 'failure-overlay';
@@ -620,15 +776,25 @@ function showFailureAnimation() {
     overlay.appendChild(text);
     document.body.appendChild(overlay);
     
-    // Show overlay
-    setTimeout(() => overlay.classList.add('show'), 10);
+    // Force a reflow to ensure the element is rendered
+    overlay.offsetHeight;
+    
+    // Show overlay with slight delay to ensure DOM is ready
+    setTimeout(() => {
+        overlay.classList.add('show');
+        console.log('Failure animation show class added'); // Debug log
+    }, 10);
     
     // Create particles from center with failure pattern
     const centerX = window.innerWidth / 2;
     const centerY = window.innerHeight / 2;
     
+    // Reduce particle count on mobile for better performance
+    const isMobile = window.innerWidth <= 480;
+    const particleCount = isMobile ? 8 : 15;
+    
     // Create fewer particles with downward motion
-    for (let i = 0; i < 15; i++) {
+    for (let i = 0; i < particleCount; i++) {
         setTimeout(() => {
             createFailureParticle(centerX, centerY);
         }, i * 60);
@@ -638,6 +804,7 @@ function showFailureAnimation() {
     setTimeout(() => {
         if (document.body.contains(overlay)) {
             document.body.removeChild(overlay);
+            console.log('Failure animation overlay removed'); // Debug log
         }
     }, 1200);
 }
