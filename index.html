@@ -19,6 +19,7 @@
                 <span class="score-label">Score</span>
                 <span class="score" id="score">0</span>
             </div>
+            <button class="learnt-words-btn" id="learntWordsBtn">📚 Learnt Words</button>
         </header>
 
         <!-- Game Area -->
@@ -91,6 +92,26 @@
                     <!-- Dynamic content will be inserted here -->
                 </div>
                 <button class="continue-btn" id="continueBtn">Continue Playing</button>
+            </div>
+        </div>
+
+        <!-- Learnt Words Modal -->
+        <div class="modal" id="learntWordsModal">
+            <div class="modal-content learnt-words-modal">
+                <div class="learnt-words-header">
+                    <h2>📚 Your Learnt Words</h2>
+                    <button class="close-btn" id="closeLearntWordsBtn">✕</button>
+                </div>
+                <div class="learnt-words-stats">
+                    <p>You've learnt <span id="learntWordsCount">0</span> words so far!</p>
+                </div>
+                <div class="learnt-words-list" id="learntWordsList">
+                    <!-- Dynamic content will be inserted here -->
+                </div>
+                <div class="learnt-words-actions">
+                    <button class="clear-words-btn" id="clearWordsBtn">Clear All Words</button>
+                    <button class="back-to-game-btn" id="backToGameBtn">Back to Game</button>
+                </div>
             </div>
         </div>
     </div>

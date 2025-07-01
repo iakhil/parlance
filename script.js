@@ -1,6 +1,75 @@
 // Game Data - will be loaded from JSON
 let gameData = [];
 
+// Learnt Words Management
+class LearntWordsManager {
+    constructor() {
+        this.storageKey = 'parlance-learnt-words';
+    }
+
+    // Get all learnt words from localStorage
+    getLearntWords() {
+        try {
+            const stored = localStorage.getItem(this.storageKey);
+            return stored ? JSON.parse(stored) : [];
+        } catch (error) {
+            console.error('Error reading learnt words:', error);
+            return [];
+        }
+    }
+
+    // Add a word to learnt words
+    addLearntWord(word, dictionaryData = null) {
+        const learntWords = this.getLearntWords();
+        
+        // Check if word already exists
+        const existingIndex = learntWords.findIndex(w => w.word.toLowerCase() === word.toLowerCase());
+        
+        const learntWord = {
+            word: word,
+            dateAdded: new Date().toISOString(),
+            dictionaryData: dictionaryData
+        };
+
+        if (existingIndex >= 0) {
+            // Update existing word with new dictionary data if provided
+            if (dictionaryData) {
+                learntWords[existingIndex].dictionaryData = dictionaryData;
+                learntWords[existingIndex].dateAdded = new Date().toISOString();
+            }
+        } else {
+            // Add new word
+            learntWords.unshift(learntWord); // Add to beginning for recent-first order
+        }
+
+        this.saveLearntWords(learntWords);
+        console.log(`Word "${word}" added to learnt words`);
+    }
+
+    // Save learnt words to localStorage
+    saveLearntWords(words) {
+        try {
+            localStorage.setItem(this.storageKey, JSON.stringify(words));
+        } catch (error) {
+            console.error('Error saving learnt words:', error);
+        }
+    }
+
+    // Clear all learnt words
+    clearAllWords() {
+        localStorage.removeItem(this.storageKey);
+        console.log('All learnt words cleared');
+    }
+
+    // Get count of learnt words
+    getCount() {
+        return this.getLearntWords().length;
+    }
+}
+
+// Initialize learnt words manager
+const learntWordsManager = new LearntWordsManager();
+
 // Load game data from JSON file
 async function loadGameData() {
     try {
@@ -118,9 +187,9 @@ class GameState {
         // Shuffle definitions for the new word to add variety
         gameData[this.currentWordIndex].definitions = shuffleArray(gameData[this.currentWordIndex].definitions);
         
-        // Show dictionary information for the completed word
+        // Show dictionary information for the completed word and save to learnt words
         if (currentWord) {
-            showDictionaryModal(currentWord);
+            showDictionaryModalAndSave(currentWord);
         }
     }
 
@@ -166,6 +235,15 @@ const gameOverModal = document.getElementById('gameOverModal');
 const playAgainBtn = document.getElementById('playAgainBtn');
 const dictionaryModal = document.getElementById('dictionaryModal');
 const continueBtn = document.getElementById('continueBtn');
+
+// Learnt Words DOM Elements
+const learntWordsBtn = document.getElementById('learntWordsBtn');
+const learntWordsModal = document.getElementById('learntWordsModal');
+const closeLearntWordsBtn = document.getElementById('closeLearntWordsBtn');
+const learntWordsCount = document.getElementById('learntWordsCount');
+const learntWordsList = document.getElementById('learntWordsList');
+const clearWordsBtn = document.getElementById('clearWordsBtn');
+const backToGameBtn = document.getElementById('backToGameBtn');
 
 // Card Management
 class Card {
@@ -429,15 +507,47 @@ continueBtn.addEventListener('click', () => {
     }, 300);
 });
 
+// Learnt Words Event Listeners
+learntWordsBtn.addEventListener('click', () => {
+    showLearntWordsModal();
+});
+
+closeLearntWordsBtn.addEventListener('click', () => {
+    hideLearntWordsModal();
+});
+
+backToGameBtn.addEventListener('click', () => {
+    hideLearntWordsModal();
+});
+
+clearWordsBtn.addEventListener('click', () => {
+    clearAllLearntWords();
+});
+
+// Close learnt words modal when clicking outside
+learntWordsModal.addEventListener('click', (e) => {
+    if (e.target === learntWordsModal) {
+        hideLearntWordsModal();
+    }
+});
+
 // Keyboard controls (optional)
 document.addEventListener('keydown', (e) => {
     // Don't trigger keyboard controls when modal is open
-    if (dictionaryModal.classList.contains('show') || gameOverModal.classList.contains('show')) {
+    if (dictionaryModal.classList.contains('show') || gameOverModal.classList.contains('show') || learntWordsModal.classList.contains('show')) {
         if (e.key === 'Enter' || e.key === ' ') {
             if (dictionaryModal.classList.contains('show')) {
                 continueBtn.click();
             } else if (gameOverModal.classList.contains('show')) {
                 playAgainBtn.click();
+            } else if (learntWordsModal.classList.contains('show')) {
+                backToGameBtn.click();
+            }
+        } else if (e.key === 'Escape') {
+            if (learntWordsModal.classList.contains('show')) {
+                hideLearntWordsModal();
+            } else if (dictionaryModal.classList.contains('show')) {
+                hideDictionaryModal();
             }
         }
         return;
@@ -922,4 +1032,102 @@ async function showDictionaryModal(word) {
 
 function hideDictionaryModal() {
     dictionaryModal.classList.remove('show');
+}
+
+// Learnt Words Functions
+function showLearntWordsModal() {
+    updateLearntWordsDisplay();
+    learntWordsModal.classList.add('show');
+}
+
+function hideLearntWordsModal() {
+    learntWordsModal.classList.remove('show');
+}
+
+function updateLearntWordsDisplay() {
+    const learntWords = learntWordsManager.getLearntWords();
+    learntWordsCount.textContent = learntWords.length;
+
+    if (learntWords.length === 0) {
+        learntWordsList.innerHTML = `
+            <div class="empty-learnt-words">
+                <div class="empty-learnt-words-icon">📚</div>
+                <p>No words learnt yet!</p>
+                <p>Start playing to build your vocabulary.</p>
+            </div>
+        `;
+        return;
+    }
+
+    let html = '';
+    learntWords.forEach(wordItem => {
+        const date = new Date(wordItem.dateAdded).toLocaleDateString();
+        const dictData = wordItem.dictionaryData;
+        
+        html += `
+            <div class="learnt-word-item">
+                <div class="learnt-word-title">
+                    ${wordItem.word}
+                    ${dictData?.phonetic ? `<span class="learnt-word-phonetic">${dictData.phonetic}</span>` : ''}
+                </div>
+                <div class="learnt-word-date">Learnt on ${date}</div>
+                <div class="learnt-word-definitions">
+        `;
+
+        if (dictData?.meanings && dictData.meanings.length > 0) {
+            dictData.meanings.forEach(meaning => {
+                html += `<div class="learnt-definition-pos">${meaning.partOfSpeech}</div>`;
+                
+                if (meaning.definitions && meaning.definitions.length > 0) {
+                    meaning.definitions.slice(0, 2).forEach(def => { // Show max 2 definitions per part of speech
+                        html += `
+                            <div class="learnt-word-definition">
+                                <div class="learnt-definition-text">${def.definition}</div>
+                                ${def.example ? `<div class="learnt-definition-example">"${def.example}"</div>` : ''}
+                            </div>
+                        `;
+                    });
+                }
+            });
+        } else {
+            html += `
+                <div class="learnt-word-definition">
+                    <div class="learnt-definition-text">Definition not available</div>
+                </div>
+            `;
+        }
+
+        html += `
+                </div>
+            </div>
+        `;
+    });
+
+    learntWordsList.innerHTML = html;
+}
+
+function clearAllLearntWords() {
+    if (confirm('Are you sure you want to clear all learnt words? This action cannot be undone.')) {
+        learntWordsManager.clearAllWords();
+        updateLearntWordsDisplay();
+        console.log('All learnt words cleared by user');
+    }
+}
+
+// Enhanced showDictionaryModal to save word data
+async function showDictionaryModalAndSave(word) {
+    // Show modal with loading state
+    document.getElementById('dictWord').textContent = word;
+    document.getElementById('dictPhonetic').textContent = '';
+    document.getElementById('dictContent').innerHTML = '<div class="loading-dictionary">Loading definition...</div>';
+    document.getElementById('audioBtn').style.display = 'none';
+    
+    dictionaryModal.classList.add('show');
+    
+    // Fetch and display dictionary data
+    const wordData = await fetchWordDefinition(word);
+    displayDictionaryInfo(wordData, word);
+    
+    // Add word to learnt words with dictionary data
+    learntWordsManager.addLearntWord(word, wordData);
 } 

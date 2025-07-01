@@ -30,6 +30,7 @@ body {
     align-items: center;
     margin-bottom: 30px;
     padding: 20px 0;
+    width: 100%;
 }
 
 .game-title {
@@ -41,6 +42,8 @@ body {
     -webkit-text-fill-color: transparent;
     background-clip: text;
     animation: gradientShift 3s ease-in-out infinite;
+    flex: 0 0 auto;
+    min-width: 200px;
 }
 
 @keyframes gradientShift {
@@ -49,7 +52,9 @@ body {
 }
 
 .score-container {
-    text-align: right;
+    text-align: center;
+    flex: 1;
+    margin: 0 40px;
 }
 
 .score-label {
@@ -63,6 +68,32 @@ body {
     font-size: 2rem;
     font-weight: 700;
     color: #4ecdc4;
+}
+
+.learnt-words-btn {
+    background: linear-gradient(45deg, #6c5ce7, #a29bfe);
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 25px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    text-transform: none;
+    letter-spacing: 0.3px;
+    white-space: nowrap;
+    flex: 0 0 auto;
+    margin-left: auto;
+}
+
+.learnt-words-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(108, 92, 231, 0.3);
+}
+
+.learnt-words-btn:active {
+    transform: translateY(0);
 }
 
 /* Game Area */
@@ -331,6 +362,12 @@ body {
         font-size: 2rem;
     }
     
+    .learnt-words-btn {
+        font-size: 0.8rem;
+        padding: 8px 14px;
+        border-radius: 20px;
+    }
+    
     .current-word {
         font-size: 1.8rem;
     }
@@ -341,6 +378,30 @@ body {
     
     .card-definition {
         font-size: 1rem;
+    }
+    
+    .learnt-words-modal {
+        width: 98%;
+        max-height: 90vh;
+    }
+    
+    .learnt-words-header h2 {
+        font-size: 1.5rem;
+    }
+    
+    .learnt-word-item {
+        padding: 15px;
+    }
+    
+    .learnt-word-title {
+        font-size: 1.2rem;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+    
+    .learnt-words-actions {
+        flex-direction: column;
     }
 }
 
@@ -865,4 +926,216 @@ body {
         width: 6px;
         height: 6px;
     }
+}
+
+/* Learnt Words Modal Styles */
+.learnt-words-modal {
+    max-width: 600px;
+    width: 95%;
+    max-height: 85vh;
+    overflow-y: auto;
+}
+
+.learnt-words-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.learnt-words-header h2 {
+    margin: 0;
+    font-size: 1.8rem;
+    color: #6c5ce7;
+}
+
+.close-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #888;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+}
+
+.close-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    transform: scale(1.1);
+}
+
+.learnt-words-stats {
+    text-align: center;
+    margin-bottom: 25px;
+    padding: 15px;
+    background: rgba(108, 92, 231, 0.1);
+    border-radius: 10px;
+    border: 1px solid rgba(108, 92, 231, 0.2);
+}
+
+.learnt-words-stats p {
+    margin: 0;
+    color: #e0e0e0;
+    font-size: 1.1rem;
+}
+
+.learnt-words-stats span {
+    color: #6c5ce7;
+    font-weight: 700;
+    font-size: 1.3rem;
+}
+
+.learnt-words-list {
+    margin-bottom: 25px;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.learnt-word-item {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+}
+
+.learnt-word-item:hover {
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.learnt-word-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #6c5ce7;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.learnt-word-phonetic {
+    font-family: 'Courier New', monospace;
+    font-size: 1rem;
+    color: #888;
+    font-weight: normal;
+}
+
+.learnt-word-date {
+    font-size: 0.8rem;
+    color: #666;
+    margin-bottom: 10px;
+    font-style: italic;
+}
+
+.learnt-word-definitions {
+    margin-top: 10px;
+}
+
+.learnt-word-definition {
+    margin-bottom: 12px;
+    padding-left: 15px;
+    border-left: 3px solid rgba(108, 92, 231, 0.3);
+}
+
+.learnt-definition-pos {
+    background: linear-gradient(45deg, #6c5ce7, #a29bfe);
+    color: white;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: inline-block;
+    margin-bottom: 6px;
+}
+
+.learnt-definition-text {
+    color: #e0e0e0;
+    font-size: 0.95rem;
+    line-height: 1.4;
+    margin-bottom: 6px;
+}
+
+.learnt-definition-example {
+    color: #888;
+    font-style: italic;
+    font-size: 0.85rem;
+    padding: 6px 10px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 6px;
+    border-left: 3px solid #6c5ce7;
+}
+
+.empty-learnt-words {
+    text-align: center;
+    padding: 40px 20px;
+    color: #888;
+}
+
+.empty-learnt-words-icon {
+    font-size: 4rem;
+    margin-bottom: 15px;
+    opacity: 0.5;
+}
+
+.learnt-words-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: space-between;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.clear-words-btn {
+    background: linear-gradient(45deg, #ff6b6b, #ee5a52);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    flex: 1;
+}
+
+.clear-words-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(255, 107, 107, 0.3);
+}
+
+.back-to-game-btn {
+    background: linear-gradient(45deg, #4ecdc4, #44a08d);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    flex: 2;
+}
+
+.back-to-game-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(78, 205, 196, 0.3);
+}
+
+.clear-words-btn:active,
+.back-to-game-btn:active {
+    transform: translateY(0);
 } 
