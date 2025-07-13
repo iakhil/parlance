@@ -1,6 +1,9 @@
 // Game Data - will be loaded from JSON
 let gameData = [];
 
+// API Base URL
+const API_BASE_URL = window.location.origin;
+
 // Learnt Words Management
 class LearntWordsManager {
     constructor() {
@@ -73,7 +76,7 @@ const learntWordsManager = new LearntWordsManager();
 // Load game data from JSON file
 async function loadGameData() {
     try {
-        const response = await fetch('words-data.json');
+        const response = await fetch('/static/js/words-data.json');
         const data = await response.json();
         gameData = data;
         
@@ -121,7 +124,7 @@ function shuffleArray(array) {
     return shuffled;
 }
 
-// Game State
+// Game State - Modified for competitive leaderboard gameplay
 class GameState {
     constructor() {
         this.currentWordIndex = 0;
@@ -133,7 +136,8 @@ class GameState {
         this.maxStreak = 0;
         this.gameCards = [];
         this.isGameOver = false;
-        this.usedWords = new Set(); // Track used words to avoid repetition
+        this.usedWords = new Set();
+        this.wordsLearned = 0; // Track for leaderboard
     }
 
     reset() {
@@ -146,6 +150,7 @@ class GameState {
         this.maxStreak = 0;
         this.gameCards = [];
         this.isGameOver = false;
+        this.wordsLearned = 0;
         // Don't reset usedWords - keep variety across games
         
         // Reshuffle data for new game
@@ -156,8 +161,8 @@ class GameState {
         this.currentDefinitionIndex++;
         // Check if we've run out of definitions for current word
         if (this.currentDefinitionIndex >= gameData[this.currentWordIndex].definitions.length) {
-            // If we've used all definitions without finding the correct one, move to next word
-            this.nextWord();
+            // If we've used all definitions without finding the correct one, game over
+            this.endGame();
         }
     }
 
@@ -165,8 +170,9 @@ class GameState {
         // Get the current word before moving to next
         const currentWord = gameData[this.currentWordIndex]?.word;
         
-        // Mark current word as used
+        // Mark current word as used and increment words learned
         this.usedWords.add(this.currentWordIndex);
+        this.wordsLearned++;
         
         this.currentWordIndex++;
         this.currentDefinitionIndex = 0; // Reset definition index for new word
@@ -216,6 +222,8 @@ class GameState {
         this.incorrect++;
         this.streak = 0;
         showFeedback(false);
+        // Game ends on incorrect swipe in competitive mode
+        this.endGame();
     }
 }
 
@@ -244,6 +252,20 @@ const learntWordsCount = document.getElementById('learntWordsCount');
 const learntWordsList = document.getElementById('learntWordsList');
 const clearWordsBtn = document.getElementById('clearWordsBtn');
 const backToGameBtn = document.getElementById('backToGameBtn');
+
+// Leaderboard DOM Elements
+const leaderboardBtn = document.getElementById('leaderboardBtn');
+const leaderboardModal = document.getElementById('leaderboardModal');
+const closeLeaderboardBtn = document.getElementById('closeLeaderboardBtn');
+const leaderboardStats = document.getElementById('leaderboardStats');
+const leaderboardList = document.getElementById('leaderboardList');
+const refreshLeaderboardBtn = document.getElementById('refreshLeaderboardBtn');
+const backFromLeaderboardBtn = document.getElementById('backFromLeaderboardBtn');
+
+// Score Submission DOM Elements
+const playerNameInput = document.getElementById('playerName');
+const submitScoreBtn = document.getElementById('submitScoreBtn');
+const finalWordsLearned = document.getElementById('finalWordsLearned');
 
 // Card Management
 class Card {
@@ -462,9 +484,7 @@ function createInitialCards() {
 }
 
 function createNextCard() {
-    if (game.isGameOver || game.currentWordIndex >= gameData.length || gameData.length === 0) {
-        return;
-    }
+    if (game.isGameOver || game.currentWordIndex >= gameData.length || gameData.length === 0) return;
 
     const currentWord = gameData[game.currentWordIndex];
     const currentDefinition = currentWord.definitions[game.currentDefinitionIndex];
@@ -481,8 +501,13 @@ function createNextCard() {
 function showGameOverModal() {
     document.getElementById('finalScore').textContent = game.score;
     document.getElementById('finalCorrect').textContent = game.correct;
-    document.getElementById('finalIncorrect').textContent = game.incorrect;
+    document.getElementById('finalWordsLearned').textContent = game.wordsLearned;
     document.getElementById('finalStreak').textContent = game.maxStreak;
+    
+    // Reset score submission form
+    playerNameInput.value = '';
+    submitScoreBtn.disabled = false;
+    submitScoreBtn.textContent = 'Submit Score';
     
     gameOverModal.classList.add('show');
 }
@@ -494,97 +519,98 @@ function hideGameOverModal() {
 // Event Listeners
 playAgainBtn.addEventListener('click', () => {
     hideGameOverModal();
-    setTimeout(initGame, 300);
+    game.reset();
+    initGame();
 });
 
-// Dictionary modal continue button
+submitScoreBtn.addEventListener('click', handleScoreSubmission);
+
+// Allow Enter key to submit score
+playerNameInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+        handleScoreSubmission();
+    }
+});
+
+// Leaderboard Event Listeners
+leaderboardBtn.addEventListener('click', showLeaderboardModal);
+closeLeaderboardBtn.addEventListener('click', hideLeaderboardModal);
+backFromLeaderboardBtn.addEventListener('click', hideLeaderboardModal);
+refreshLeaderboardBtn.addEventListener('click', loadLeaderboard);
+
+// Continue button (from dictionary modal)
 continueBtn.addEventListener('click', () => {
     hideDictionaryModal();
-    // Continue with the game - create next card for the new word
-    setTimeout(() => {
-        if (!game.isGameOver) {
-            updateWordDisplay();
-            createNextCard();
-        }
-    }, 300);
+    createCards();
 });
 
 // Learnt Words Event Listeners
-learntWordsBtn.addEventListener('click', () => {
-    showLearntWordsModal();
-});
-
-closeLearntWordsBtn.addEventListener('click', () => {
-    hideLearntWordsModal();
-});
-
-backToGameBtn.addEventListener('click', () => {
-    hideLearntWordsModal();
-});
-
+learntWordsBtn.addEventListener('click', showLearntWordsModal);
+closeLearntWordsBtn.addEventListener('click', hideLearntWordsModal);
+backToGameBtn.addEventListener('click', hideLearntWordsModal);
 clearWordsBtn.addEventListener('click', () => {
-    clearAllLearntWords();
-});
-
-// Close learnt words modal when clicking outside
-learntWordsModal.addEventListener('click', (e) => {
-    if (e.target === learntWordsModal) {
-        hideLearntWordsModal();
+    if (confirm('Are you sure you want to clear all learnt words? This cannot be undone.')) {
+        learntWordsManager.clearAllWords();
+        displayLearntWords();
+        updateLearntWordsCount();
     }
 });
 
-// Keyboard controls (optional)
+// Close modals when clicking outside
+[gameOverModal, dictionaryModal, learntWordsModal, leaderboardModal].forEach(modal => {
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            modal.classList.remove('show');
+        }
+    });
+});
+
+// Keyboard shortcuts
 document.addEventListener('keydown', (e) => {
-    // Don't trigger keyboard controls when modal is open
-    if (dictionaryModal.classList.contains('show') || gameOverModal.classList.contains('show') || learntWordsModal.classList.contains('show')) {
-        if (e.key === 'Enter' || e.key === ' ') {
-            if (dictionaryModal.classList.contains('show')) {
-                continueBtn.click();
-            } else if (gameOverModal.classList.contains('show')) {
-                playAgainBtn.click();
-            } else if (learntWordsModal.classList.contains('show')) {
-                backToGameBtn.click();
-            }
-        } else if (e.key === 'Escape') {
-            if (learntWordsModal.classList.contains('show')) {
-                hideLearntWordsModal();
-            } else if (dictionaryModal.classList.contains('show')) {
-                hideDictionaryModal();
-            }
-        }
-        return;
+    if (gameOverModal.classList.contains('show') || 
+        dictionaryModal.classList.contains('show') || 
+        learntWordsModal.classList.contains('show') ||
+        leaderboardModal.classList.contains('show')) {
+        return; // Don't handle game controls when modals are open
     }
 
-    const topCard = document.querySelector('.card:last-child');
-    if (!topCard || topCard.classList.contains('swipe-left') || topCard.classList.contains('swipe-right')) {
-        return;
-    }
-
-    if (e.key === 'ArrowLeft') {
-        const cardInstance = topCard.cardInstance;
-        if (cardInstance) {
-            cardInstance.swipe('left');
-        }
-    } else if (e.key === 'ArrowRight') {
-        const cardInstance = topCard.cardInstance;
-        if (cardInstance) {
-            cardInstance.swipe('right');
-        }
+    switch(e.key) {
+        case 'ArrowLeft':
+            e.preventDefault();
+            if (currentCard) swipeCard('left');
+            break;
+        case 'ArrowRight':
+            e.preventDefault();
+            if (currentCard) swipeCard('right');
+            break;
+        case 'Enter':
+        case ' ':
+            e.preventDefault();
+            if (currentCard) swipeCard('right');
+            break;
+        case 'Escape':
+            e.preventDefault();
+            if (currentCard) swipeCard('left');
+            break;
+        case 'l':
+        case 'L':
+            if (e.ctrlKey || e.metaKey) {
+                e.preventDefault();
+                showLearntWordsModal();
+            }
+            break;
+        case 'b':
+        case 'B':
+            if (e.ctrlKey || e.metaKey) {
+                e.preventDefault();
+                showLeaderboardModal();
+            }
+            break;
     }
 });
 
-// Add card instance reference for keyboard controls
-const originalCreateElement = Card.prototype.createElement;
-Card.prototype.createElement = function() {
-    const element = originalCreateElement.call(this);
-    element.cardInstance = this;
-    return element;
-};
-
-// Initialize the game when page loads
-document.addEventListener('DOMContentLoaded', () => {
-    loadGameData(); // Load data first, then init game
-});
+// Initialize the game
+loadGameData();
 
 // Add visual feedback for correct/incorrect answers
 function showFeedback(isCorrect) {
@@ -1132,4 +1158,414 @@ async function showDictionaryModalAndSave(word) {
     
     // Add word to learnt words with dictionary data
     learntWordsManager.addLearntWord(word, wordData);
+}
+
+// Leaderboard API Functions
+async function submitScore(playerName, score, wordsLearned) {
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/submit-score`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                player_name: playerName,
+                score: score,
+                words_learned: wordsLearned
+            })
+        });
+
+        const data = await response.json();
+        
+        if (!response.ok) {
+            throw new Error(data.error || 'Failed to submit score');
+        }
+
+        return data;
+    } catch (error) {
+        console.error('Error submitting score:', error);
+        throw error;
+    }
+}
+
+async function fetchLeaderboard() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/leaderboard`);
+        const data = await response.json();
+        
+        if (!response.ok) {
+            throw new Error(data.error || 'Failed to fetch leaderboard');
+        }
+
+        return data;
+    } catch (error) {
+        console.error('Error fetching leaderboard:', error);
+        throw error;
+    }
+}
+
+async function fetchStats() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/stats`);
+        const data = await response.json();
+        
+        if (!response.ok) {
+            throw new Error(data.error || 'Failed to fetch stats');
+        }
+
+        return data;
+    } catch (error) {
+        console.error('Error fetching stats:', error);
+        throw error;
+    }
+}
+
+// Score Submission Functions
+function handleScoreSubmission() {
+    const playerName = playerNameInput.value.trim();
+    
+    if (!playerName) {
+        alert('Please enter your name');
+        return;
+    }
+
+    if (playerName.length > 20) {
+        alert('Name too long (max 20 characters)');
+        return;
+    }
+
+    submitScoreBtn.disabled = true;
+    submitScoreBtn.textContent = 'Submitting...';
+
+    submitScore(playerName, game.score, game.wordsLearned)
+        .then(result => {
+            alert(`Score submitted! You ranked #${result.rank}`);
+            playerNameInput.value = '';
+            hideGameOverModal();
+            showLeaderboardModal(); // Show leaderboard after submission
+        })
+        .catch(error => {
+            alert(`Failed to submit score: ${error.message}`);
+        })
+        .finally(() => {
+            submitScoreBtn.disabled = false;
+            submitScoreBtn.textContent = 'Submit Score';
+        });
+}
+
+// Leaderboard Display Functions
+async function showLeaderboardModal() {
+    leaderboardModal.classList.add('show');
+    await loadLeaderboard();
+}
+
+function hideLeaderboardModal() {
+    leaderboardModal.classList.remove('show');
+}
+
+async function loadLeaderboard() {
+    try {
+        // Show loading state
+        leaderboardList.innerHTML = '<div class="loading-leaderboard">Loading leaderboard...</div>';
+        leaderboardStats.innerHTML = '<div class="loading-leaderboard">Loading stats...</div>';
+
+        // Fetch data in parallel
+        const [leaderboardData, statsData] = await Promise.all([
+            fetchLeaderboard(),
+            fetchStats()
+        ]);
+
+        // Display stats
+        displayLeaderboardStats(statsData);
+        
+        // Display leaderboard
+        displayLeaderboard(leaderboardData.leaderboard);
+
+    } catch (error) {
+        console.error('Error loading leaderboard:', error);
+        leaderboardList.innerHTML = '<div class="empty-leaderboard">Failed to load leaderboard</div>';
+        leaderboardStats.innerHTML = '<div class="empty-leaderboard">Failed to load stats</div>';
+    }
+}
+
+function displayLeaderboardStats(stats) {
+    leaderboardStats.innerHTML = `
+        <div class="leaderboard-stat">
+            <span class="leaderboard-stat-value">${stats.total_games}</span>
+            <span class="leaderboard-stat-label">Total Games</span>
+        </div>
+        <div class="leaderboard-stat">
+            <span class="leaderboard-stat-value">${stats.highest_score}</span>
+            <span class="leaderboard-stat-label">High Score</span>
+        </div>
+        <div class="leaderboard-stat">
+            <span class="leaderboard-stat-value">${stats.average_score}</span>
+            <span class="leaderboard-stat-label">Avg Score</span>
+        </div>
+        <div class="leaderboard-stat">
+            <span class="leaderboard-stat-value">${stats.total_words_learned}</span>
+            <span class="leaderboard-stat-label">Words Learned</span>
+        </div>
+    `;
+}
+
+function displayLeaderboard(leaderboard) {
+    if (leaderboard.length === 0) {
+        leaderboardList.innerHTML = `
+            <div class="empty-leaderboard">
+                <div class="empty-leaderboard-icon">🏆</div>
+                <p>No scores yet!</p>
+                <p>Be the first to set a record.</p>
+            </div>
+        `;
+        return;
+    }
+
+    let html = '';
+    leaderboard.forEach(entry => {
+        const rankClass = entry.rank <= 3 ? `top-3 rank-${entry.rank}` : '';
+        
+        html += `
+            <div class="leaderboard-entry ${rankClass}">
+                <div class="leaderboard-rank">#${entry.rank}</div>
+                <div class="leaderboard-player">
+                    <div class="leaderboard-player-name">${escapeHtml(entry.player_name)}</div>
+                    <div class="leaderboard-player-info">${entry.words_learned} words learned</div>
+                </div>
+                <div class="leaderboard-score">
+                    <div class="leaderboard-score-value">${entry.score}</div>
+                    <div class="leaderboard-score-time">${entry.time_ago}</div>
+                </div>
+            </div>
+        `;
+    });
+
+    leaderboardList.innerHTML = html;
+}
+
+// Utility function to escape HTML
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+// Swipe Handling - Updated for competitive mode
+function handleSwipe(direction) {
+    if (game.isGameOver || !currentCard) return;
+
+    const currentWord = gameData[game.currentWordIndex];
+    const currentDefinition = currentWord.definitions[game.currentDefinitionIndex];
+    
+    // Determine if the swipe was correct
+    let isCorrect = false;
+    
+    if (direction === 'right' && currentDefinition.correct) {
+        // Swiped right on correct definition - CORRECT
+        isCorrect = true;
+        game.addCorrect();
+        // Trigger success animation
+        showSuccessAnimation();
+        // Move to next word after a delay
+        setTimeout(() => {
+            if (!game.isGameOver) {
+                game.nextWord();
+            }
+        }, 1200);
+    } else if (direction === 'left' && !currentDefinition.correct) {
+        // Swiped left on incorrect definition - CORRECT
+        isCorrect = true;
+        game.addCorrect();
+        // Continue with same word, next definition
+        setTimeout(() => {
+            if (!game.isGameOver) {
+                game.nextDefinition();
+                createCards();
+            }
+        }, 500);
+    } else {
+        // Wrong swipe - GAME OVER in competitive mode
+        isCorrect = false;
+        game.addIncorrect();
+        // Trigger failure animation
+        showFailureAnimation();
+        // Game ends automatically via addIncorrect()
+    }
+
+    // Update display
+    updateScoreDisplay();
+    updateStatsDisplay();
+}
+
+function swipeCard(direction) {
+    handleSwipe(direction);
+    
+    // Animate the card off screen
+    if (currentCard) {
+        currentCard.classList.add(`swipe-${direction}`);
+        
+        // Remove the card after animation
+        setTimeout(() => {
+            if (currentCard && currentCard.parentNode) {
+                currentCard.parentNode.removeChild(currentCard);
+            }
+            currentCard = null;
+        }, 600);
+    }
+}
+
+// Card Creation - Updated for new game flow
+let currentCard = null;
+
+function createCards() {
+    if (game.isGameOver) return;
+
+    // Clear existing cards
+    cardStackEl.innerHTML = '';
+    currentCard = null;
+
+    const currentWord = gameData[game.currentWordIndex];
+    if (!currentWord) {
+        game.endGame();
+        return;
+    }
+
+    // Create single card for current definition
+    const definition = currentWord.definitions[game.currentDefinitionIndex];
+    if (!definition) {
+        game.endGame();
+        return;
+    }
+
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `
+        <div class="card-definition">${definition.text}</div>
+    `;
+
+    // Add touch and mouse event listeners
+    addCardInteraction(card);
+    
+    cardStackEl.appendChild(card);
+    currentCard = card;
+    
+    // Update word display
+    updateWordDisplay();
+}
+
+function addCardInteraction(card) {
+    let startX = 0;
+    let startY = 0;
+    let currentX = 0;
+    let currentY = 0;
+    let isDragging = false;
+
+    // Touch Events
+    card.addEventListener('touchstart', handleStart, { passive: true });
+    card.addEventListener('touchmove', handleMove, { passive: false });
+    card.addEventListener('touchend', handleEnd, { passive: true });
+
+    // Mouse Events
+    card.addEventListener('mousedown', handleStart);
+    card.addEventListener('mousemove', handleMove);
+    card.addEventListener('mouseup', handleEnd);
+    card.addEventListener('mouseleave', handleEnd);
+
+    function handleStart(e) {
+        if (game.isGameOver) return;
+        
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        
+        startX = clientX;
+        startY = clientY;
+        currentX = clientX;
+        currentY = clientY;
+        isDragging = true;
+        
+        card.classList.add('dragging');
+        e.preventDefault();
+    }
+
+    function handleMove(e) {
+        if (!isDragging || game.isGameOver) return;
+        
+        e.preventDefault();
+        
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        
+        currentX = clientX;
+        currentY = clientY;
+        
+        const deltaX = currentX - startX;
+        const deltaY = currentY - startY;
+        const rotation = deltaX * 0.1;
+        
+        card.style.transform = `translate(${deltaX}px, ${deltaY}px) rotate(${rotation}deg)`;
+        card.style.setProperty('--rotation', `${rotation}deg`);
+        
+        // Show indicators based on swipe direction
+        const threshold = 50;
+        if (Math.abs(deltaX) > threshold) {
+            if (deltaX > 0) {
+                rightIndicator.classList.add('show');
+                leftIndicator.classList.remove('show');
+            } else {
+                leftIndicator.classList.add('show');
+                rightIndicator.classList.remove('show');
+            }
+        } else {
+            leftIndicator.classList.remove('show');
+            rightIndicator.classList.remove('show');
+        }
+    }
+
+    function handleEnd(e) {
+        if (!isDragging || game.isGameOver) return;
+        
+        isDragging = false;
+        card.classList.remove('dragging');
+        
+        const deltaX = currentX - startX;
+        const threshold = 100;
+        
+        leftIndicator.classList.remove('show');
+        rightIndicator.classList.remove('show');
+        
+        if (Math.abs(deltaX) > threshold) {
+            const direction = deltaX > 0 ? 'right' : 'left';
+            swipeCard(direction);
+        } else {
+            // Snap back to center
+            card.style.transform = '';
+            card.style.removeProperty('--rotation');
+        }
+    }
+}
+
+// Update displays
+function updateWordDisplay() {
+    if (game.isGameOver || !gameData[game.currentWordIndex]) return;
+    currentWordEl.textContent = gameData[game.currentWordIndex].word;
+}
+
+function updateScoreDisplay() {
+    scoreEl.textContent = game.score;
+}
+
+function updateStatsDisplay() {
+    correctEl.textContent = game.correct;
+    incorrectEl.textContent = game.incorrect;
+    streakEl.textContent = game.streak;
+}
+
+// Initialize Game
+function initGame() {
+    game.reset();
+    updateWordDisplay();
+    updateScoreDisplay();
+    updateStatsDisplay();
+    updateLearntWordsCount();
+    createCards();
 } 

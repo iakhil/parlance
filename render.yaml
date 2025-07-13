@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: parlance-game
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: DATABASE_URL
+        fromDatabase:
+          name: parlance-db
+          property: connectionString
+    plan: free
+
+databases:
+  - name: parlance-db
+    databaseName: parlance_production
+    user: parlance_user
+    plan: free 

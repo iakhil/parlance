@@ -1,0 +1,866 @@
+[
+    {
+        "word": "Sardonic",
+        "definitions": [
+            { "text": "Grimly mocking or cynical", "correct": true },
+            { "text": "Related to ancient Roman poetry", "correct": false },
+            { "text": "Having a metallic taste or smell", "correct": false },
+            { "text": "Extremely wealthy and luxurious", "correct": false }
+        ]
+    },
+    {
+        "word": "Taciturn",
+        "definitions": [
+            { "text": "Reserved or uncommunicative in speech", "correct": true },
+            { "text": "Having excellent tactical skills", "correct": false },
+            { "text": "Related to the sense of touch", "correct": false },
+            { "text": "Moving in a rotating motion", "correct": false }
+        ]
+    },
+    {
+        "word": "Perspicacious",
+        "definitions": [
+            { "text": "Having keen insight and understanding", "correct": true },
+            { "text": "Relating to optical perspective", "correct": false },
+            { "text": "Prone to excessive sweating", "correct": false },
+            { "text": "Having multiple viewpoints", "correct": false }
+        ]
+    },
+    {
+        "word": "Obsequious",
+        "definitions": [
+            { "text": "Excessively eager to please or obey", "correct": true },
+            { "text": "Following in chronological sequence", "correct": false },
+            { "text": "Having an obscure or hidden meaning", "correct": false },
+            { "text": "Relating to funeral ceremonies", "correct": false }
+        ]
+    },
+    {
+        "word": "Truculent",
+        "definitions": [
+            { "text": "Aggressively defiant and hostile", "correct": true },
+            { "text": "Related to transportation by truck", "correct": false },
+            { "text": "Having a thick, sturdy build", "correct": false },
+            { "text": "Prone to making trade agreements", "correct": false }
+        ]
+    },
+    {
+        "word": "Sanguine",
+        "definitions": [
+            { "text": "Optimistic and confident", "correct": true },
+            { "text": "Related to blood circulation", "correct": false },
+            { "text": "Having a reddish color", "correct": false },
+            { "text": "Prone to violent behavior", "correct": false }
+        ]
+    },
+    {
+        "word": "Pedantic",
+        "definitions": [
+            { "text": "Excessively concerned with minor details", "correct": true },
+            { "text": "Related to walking or foot travel", "correct": false },
+            { "text": "Having to do with children's education", "correct": false },
+            { "text": "Involving the use of pedestals", "correct": false }
+        ]
+    },
+    {
+        "word": "Laconic",
+        "definitions": [
+            { "text": "Brief and concise in speech", "correct": true },
+            { "text": "Related to ancient Greek culture", "correct": false },
+            { "text": "Having a milky white appearance", "correct": false },
+            { "text": "Prone to fits of laughter", "correct": false }
+        ]
+    },
+    {
+        "word": "Perfunctory",
+        "definitions": [
+            { "text": "Done without care or interest", "correct": true },
+            { "text": "Related to bodily functions", "correct": false },
+            { "text": "Having perfect functionality", "correct": false },
+            { "text": "Done with great precision", "correct": false }
+        ]
+    },
+    {
+        "word": "Magnanimous",
+        "definitions": [
+            { "text": "Generous and forgiving", "correct": true },
+            { "text": "Having magnetic properties", "correct": false },
+            { "text": "Extremely large in size", "correct": false },
+            { "text": "Related to animal behavior", "correct": false }
+        ]
+    },
+    {
+        "word": "Insipid",
+        "definitions": [
+            { "text": "Lacking flavor or excitement", "correct": true },
+            { "text": "Having keen insight", "correct": false },
+            { "text": "Relating to internal organs", "correct": false },
+            { "text": "Extremely rapid or quick", "correct": false }
+        ]
+    },
+    {
+        "word": "Gregarious",
+        "definitions": [
+            { "text": "Sociable and outgoing", "correct": true },
+            { "text": "Related to grazing animals", "correct": false },
+            { "text": "Having a gravelly texture", "correct": false },
+            { "text": "Prone to making grievances", "correct": false }
+        ]
+    },
+    {
+        "word": "Bellicose",
+        "definitions": [
+            { "text": "Aggressive and warlike", "correct": true },
+            { "text": "Having a beautiful voice", "correct": false },
+            { "text": "Related to bell-shaped objects", "correct": false },
+            { "text": "Prone to stomach problems", "correct": false }
+        ]
+    },
+    {
+        "word": "Fastidious",
+        "definitions": [
+            { "text": "Very attentive to detail", "correct": true },
+            { "text": "Moving at high speed", "correct": false },
+            { "text": "Related to religious fasting", "correct": false },
+            { "text": "Having secure fastenings", "correct": false }
+        ]
+    },
+    {
+        "word": "Palpable",
+        "definitions": [
+            { "text": "Able to be touched or felt", "correct": true },
+            { "text": "Related to the palate", "correct": false },
+            { "text": "Extremely pale in color", "correct": false },
+            { "text": "Having multiple layers", "correct": false }
+        ]
+    },
+    {
+        "word": "Recalcitrant",
+        "definitions": [
+            { "text": "Stubbornly resistant to authority", "correct": true },
+            { "text": "Able to recall information easily", "correct": false },
+            { "text": "Related to mathematical calculations", "correct": false },
+            { "text": "Prone to calcium deficiency", "correct": false }
+        ]
+    },
+    {
+        "word": "Tenacious",
+        "definitions": [
+            { "text": "Persistent and determined", "correct": true },
+            { "text": "Having ten of something", "correct": false },
+            { "text": "Related to rental agreements", "correct": false },
+            { "text": "Extremely fragile or delicate", "correct": false }
+        ]
+    },
+    {
+        "word": "Vicarious",
+        "definitions": [
+            { "text": "Experienced through another person", "correct": true },
+            { "text": "Related to religious vicars", "correct": false },
+            { "text": "Having vicious tendencies", "correct": false },
+            { "text": "Varying in different situations", "correct": false }
+        ]
+    },
+    {
+        "word": "Ominous",
+        "definitions": [
+            { "text": "Suggesting something bad will happen", "correct": true },
+            { "text": "Including everything", "correct": false },
+            { "text": "Related to omitting information", "correct": false },
+            { "text": "Having an oval shape", "correct": false }
+        ]
+    },
+    {
+        "word": "Volatile",
+        "definitions": [
+            { "text": "Liable to change rapidly", "correct": true },
+            { "text": "Related to electric voltage", "correct": false },
+            { "text": "Having the ability to fly", "correct": false },
+            { "text": "Extremely loud in volume", "correct": false }
+        ]
+    },
+    {
+        "word": "Nefarious",
+        "definitions": [
+            { "text": "Extremely wicked or villainous", "correct": true },
+            { "text": "Related to the nervous system", "correct": false },
+            { "text": "Having various different forms", "correct": false },
+            { "text": "Prone to causing nausea", "correct": false }
+        ]
+    },
+    {
+        "word": "Meticulous",
+        "definitions": [
+            { "text": "Showing great attention to detail", "correct": true },
+            { "text": "Related to weather patterns", "correct": false },
+            { "text": "Having medical properties", "correct": false },
+            { "text": "Prone to ridicule", "correct": false }
+        ]
+    },
+    {
+        "word": "Vindictive",
+        "definitions": [
+            { "text": "Having a strong desire for revenge", "correct": true },
+            { "text": "Related to wine production", "correct": false },
+            { "text": "Having the power to vindicate", "correct": false },
+            { "text": "Extremely predictive", "correct": false }
+        ]
+    },
+    {
+        "word": "Lugubrious",
+        "definitions": [
+            { "text": "Looking or sounding sad and dismal", "correct": true },
+            { "text": "Related to luggage or travel", "correct": false },
+            { "text": "Having lubricating properties", "correct": false },
+            { "text": "Extremely luxurious", "correct": false }
+        ]
+    },
+    {
+        "word": "Sagacious",
+        "definitions": [
+            { "text": "Having keen practical wisdom", "correct": true },
+            { "text": "Related to ancient sagas", "correct": false },
+            { "text": "Having a sage-like flavor", "correct": false },
+            { "text": "Prone to sagging", "correct": false }
+        ]
+    },
+    {
+        "word": "Phlegmatic",
+        "definitions": [
+            { "text": "Calm and unemotional", "correct": true },
+            { "text": "Related to respiratory problems", "correct": false },
+            { "text": "Having photographic memory", "correct": false },
+            { "text": "Extremely flexible", "correct": false }
+        ]
+    },
+    {
+        "word": "Supercilious",
+        "definitions": [
+            { "text": "Behaving as if superior to others", "correct": true },
+            { "text": "Having extra eyelashes", "correct": false },
+            { "text": "Extremely silly or foolish", "correct": false },
+            { "text": "Related to supernatural powers", "correct": false }
+        ]
+    },
+    {
+        "word": "Inexorable",
+        "definitions": [
+            { "text": "Impossible to stop or prevent", "correct": true },
+            { "text": "Unable to be explained", "correct": false },
+            { "text": "Lacking in experience", "correct": false },
+            { "text": "Not capable of exploration", "correct": false }
+        ]
+    },
+    {
+        "word": "Pernicious",
+        "definitions": [
+            { "text": "Having a harmful effect", "correct": true },
+            { "text": "Related to permanent fixtures", "correct": false },
+            { "text": "Having a pervasive smell", "correct": false },
+            { "text": "Extremely precious", "correct": false }
+        ]
+    },
+    {
+        "word": "Insidious",
+        "definitions": [
+            { "text": "Proceeding in a subtle harmful way", "correct": true },
+            { "text": "Related to internal organs", "correct": false },
+            { "text": "Having insider knowledge", "correct": false },
+            { "text": "Extremely intelligent", "correct": false }
+        ]
+    },
+    {
+        "word": "Acrimonious",
+        "definitions": [
+            { "text": "Angry and bitter in speech", "correct": true },
+            { "text": "Related to ancient ceremonies", "correct": false },
+            { "text": "Having acidic properties", "correct": false },
+            { "text": "Extremely harmonious", "correct": false }
+        ]
+    },
+    {
+        "word": "Contemptuous",
+        "definitions": [
+            { "text": "Showing disdain or scorn", "correct": true },
+            { "text": "Related to contemporary art", "correct": false },
+            { "text": "Having contemplative nature", "correct": false },
+            { "text": "Extremely content", "correct": false }
+        ]
+    },
+    {
+        "word": "Diffident",
+        "definitions": [
+            { "text": "Modest and lacking confidence", "correct": true },
+            { "text": "Having different opinions", "correct": false },
+            { "text": "Related to light diffusion", "correct": false },
+            { "text": "Extremely confident", "correct": false }
+        ]
+    },
+    {
+        "word": "Ebullient",
+        "definitions": [
+            { "text": "Cheerful and full of energy", "correct": true },
+            { "text": "Related to boiling liquids", "correct": false },
+            { "text": "Having electrical properties", "correct": false },
+            { "text": "Extremely dull", "correct": false }
+        ]
+    },
+    {
+        "word": "Fatuous",
+        "definitions": [
+            { "text": "Silly and pointless", "correct": true },
+            { "text": "Related to fate or destiny", "correct": false },
+            { "text": "Having fatty composition", "correct": false },
+            { "text": "Extremely wise", "correct": false }
+        ]
+    },
+    {
+        "word": "Imperious",
+        "definitions": [
+            { "text": "Arrogant and demanding", "correct": true },
+            { "text": "Related to imperial rule", "correct": false },
+            { "text": "Having impervious qualities", "correct": false },
+            { "text": "Extremely dangerous", "correct": false }
+        ]
+    },
+    {
+        "word": "Languid",
+        "definitions": [
+            { "text": "Tired and lacking energy", "correct": true },
+            { "text": "Related to language skills", "correct": false },
+            { "text": "Having liquid properties", "correct": false },
+            { "text": "Extremely lengthy", "correct": false }
+        ]
+    },
+    {
+        "word": "Mordant",
+        "definitions": [
+            { "text": "Sharply critical or sarcastic", "correct": true },
+            { "text": "Related to death or mortality", "correct": false },
+            { "text": "Having corrosive properties", "correct": false },
+            { "text": "Extremely moderate", "correct": false }
+        ]
+    },
+    {
+        "word": "Obloquy",
+        "definitions": [
+            { "text": "Harsh criticism or verbal abuse", "correct": true },
+            { "text": "Related to oblique angles", "correct": false },
+            { "text": "Having oblong shape", "correct": false },
+            { "text": "Extremely eloquent", "correct": false }
+        ]
+    },
+    {
+        "word": "Pellucid",
+        "definitions": [
+            { "text": "Transparently clear", "correct": true },
+            { "text": "Related to pellicans", "correct": false },
+            { "text": "Having pelvic connections", "correct": false },
+            { "text": "Extremely opaque", "correct": false }
+        ]
+    },
+    {
+        "word": "Querulous",
+        "definitions": [
+            { "text": "Complaining in an irritated way", "correct": true },
+            { "text": "Related to asking questions", "correct": false },
+            { "text": "Having quarrelsome nature", "correct": false },
+            { "text": "Extremely quiet", "correct": false }
+        ]
+    },
+    {
+        "word": "Redolent",
+        "definitions": [
+            { "text": "Strongly reminiscent of something", "correct": true },
+            { "text": "Having a reddish color", "correct": false },
+            { "text": "Related to redundancy", "correct": false },
+            { "text": "Extremely fragrant", "correct": false }
+        ]
+    },
+    {
+        "word": "Soporific",
+        "definitions": [
+            { "text": "Tending to induce sleep", "correct": true },
+            { "text": "Related to soprano voices", "correct": false },
+            { "text": "Having superior qualities", "correct": false },
+            { "text": "Extremely energizing", "correct": false }
+        ]
+    },
+    {
+        "word": "Truculent",
+        "definitions": [
+            { "text": "Eager to fight or argue", "correct": true },
+            { "text": "Related to truck transportation", "correct": false },
+            { "text": "Having trusting nature", "correct": false },
+            { "text": "Extremely peaceful", "correct": false }
+        ]
+    },
+    {
+        "word": "Vitriolic",
+        "definitions": [
+            { "text": "Filled with bitter criticism", "correct": true },
+            { "text": "Related to vitamins", "correct": false },
+            { "text": "Having vitreous properties", "correct": false },
+            { "text": "Extremely vital", "correct": false }
+        ]
+    },
+    {
+        "word": "Zealous",
+        "definitions": [
+            { "text": "Having great energy for a cause", "correct": true },
+            { "text": "Related to zoo animals", "correct": false },
+            { "text": "Having zero tolerance", "correct": false },
+            { "text": "Extremely jealous", "correct": false }
+        ]
+    },
+    {
+        "word": "Ameliorate",
+        "definitions": [
+            { "text": "To make something better", "correct": true },
+            { "text": "To make something worse", "correct": false },
+            { "text": "Related to American culture", "correct": false },
+            { "text": "To decorate with ornaments", "correct": false }
+        ]
+    },
+    {
+        "word": "Circumspect",
+        "definitions": [
+            { "text": "Careful to consider all circumstances", "correct": true },
+            { "text": "Related to circular shapes", "correct": false },
+            { "text": "Having circumference measurements", "correct": false },
+            { "text": "Extremely reckless", "correct": false }
+        ]
+    },
+    {
+        "word": "Dilatory",
+        "definitions": [
+            { "text": "Slow to act or decide", "correct": true },
+            { "text": "Related to dilation", "correct": false },
+            { "text": "Having laboratory functions", "correct": false },
+            { "text": "Extremely quick", "correct": false }
+        ]
+    },
+    {
+        "word": "Effervescent",
+        "definitions": [
+            { "text": "Vivacious and enthusiastic", "correct": true },
+            { "text": "Related to efficient processes", "correct": false },
+            { "text": "Having fluorescent properties", "correct": false },
+            { "text": "Extremely dull", "correct": false }
+        ]
+    },
+    {
+        "word": "Feckless",
+        "definitions": [
+            { "text": "Lacking initiative or strength", "correct": true },
+            { "text": "Having no freckles", "correct": false },
+            { "text": "Related to checking facts", "correct": false },
+            { "text": "Extremely powerful", "correct": false }
+        ]
+    },
+    {
+        "word": "Garrulous",
+        "definitions": [
+            { "text": "Excessively talkative", "correct": true },
+            { "text": "Related to garage storage", "correct": false },
+            { "text": "Having guardian qualities", "correct": false },
+            { "text": "Extremely quiet", "correct": false }
+        ]
+    },
+    {
+        "word": "Hapless",
+        "definitions": [
+            { "text": "Having no luck or fortune", "correct": true },
+            { "text": "Without any happiness", "correct": false },
+            { "text": "Related to random events", "correct": false },
+            { "text": "Extremely fortunate", "correct": false }
+        ]
+    },
+    {
+        "word": "Incisive",
+        "definitions": [
+            { "text": "Intelligently analytical", "correct": true },
+            { "text": "Related to cutting or slicing", "correct": false },
+            { "text": "Having inclusive nature", "correct": false },
+            { "text": "Extremely dull", "correct": false }
+        ]
+    },
+    {
+        "word": "Jocose",
+        "definitions": [
+            { "text": "Playful and humorous", "correct": true },
+            { "text": "Related to jogging", "correct": false },
+            { "text": "Having jocular tendencies", "correct": false },
+            { "text": "Extremely serious", "correct": false }
+        ]
+    },
+    {
+        "word": "Lachrymose",
+        "definitions": [
+            { "text": "Inclined to weep readily", "correct": true },
+            { "text": "Related to lack of chrome", "correct": false },
+            { "text": "Having lactose properties", "correct": false },
+            { "text": "Extremely cheerful", "correct": false }
+        ]
+    },
+    {
+        "word": "Mendacious",
+        "definitions": [
+            { "text": "Given to lying or deception", "correct": true },
+            { "text": "Related to mending things", "correct": false },
+            { "text": "Having medical knowledge", "correct": false },
+            { "text": "Extremely honest", "correct": false }
+        ]
+    },
+    {
+        "word": "Nugatory",
+        "definitions": [
+            { "text": "Of no value or importance", "correct": true },
+            { "text": "Related to gold nuggets", "correct": false },
+            { "text": "Having nutritional value", "correct": false },
+            { "text": "Extremely valuable", "correct": false }
+        ]
+    },
+    {
+        "word": "Obtuse",
+        "definitions": [
+            { "text": "Slow to understand", "correct": true },
+            { "text": "Related to angles greater than 90 degrees", "correct": false },
+            { "text": "Having obvious qualities", "correct": false },
+            { "text": "Extremely sharp", "correct": false }
+        ]
+    },
+    {
+        "word": "Penurious",
+        "definitions": [
+            { "text": "Extremely poor or stingy", "correct": true },
+            { "text": "Related to writing with pens", "correct": false },
+            { "text": "Having peninsular shape", "correct": false },
+            { "text": "Extremely generous", "correct": false }
+        ]
+    },
+    {
+        "word": "Quixotic",
+        "definitions": [
+            { "text": "Extremely idealistic and unrealistic", "correct": true },
+            { "text": "Related to quick movements", "correct": false },
+            { "text": "Having exotic qualities", "correct": false },
+            { "text": "Extremely practical", "correct": false }
+        ]
+    },
+    {
+        "word": "Ribald",
+        "definitions": [
+            { "text": "Referring to sexual matters offensively", "correct": true },
+            { "text": "Related to ribs or bones", "correct": false },
+            { "text": "Having rivalry tendencies", "correct": false },
+            { "text": "Extremely proper", "correct": false }
+        ]
+    },
+    {
+        "word": "Sycophantic",
+        "definitions": [
+            { "text": "Behaving obsequiously to gain advantage", "correct": true },
+            { "text": "Related to psychological disorders", "correct": false },
+            { "text": "Having synchronized movements", "correct": false },
+            { "text": "Extremely independent", "correct": false }
+        ]
+    },
+    {
+        "word": "Turgid",
+        "definitions": [
+            { "text": "Swollen and distended or pompous", "correct": true },
+            { "text": "Related to turbulent conditions", "correct": false },
+            { "text": "Having turtle-like qualities", "correct": false },
+            { "text": "Extremely clear", "correct": false }
+        ]
+    },
+    {
+        "word": "Umbrageous",
+        "definitions": [
+            { "text": "Taking offense easily", "correct": true },
+            { "text": "Related to umbrella coverage", "correct": false },
+            { "text": "Having ambiguous meaning", "correct": false },
+            { "text": "Extremely agreeable", "correct": false }
+        ]
+    },
+    {
+        "word": "Venal",
+        "definitions": [
+            { "text": "Open to bribery or corruption", "correct": true },
+            { "text": "Related to veins or blood", "correct": false },
+            { "text": "Having venomous properties", "correct": false },
+            { "text": "Extremely honest", "correct": false }
+        ]
+    },
+    {
+        "word": "Winsome",
+        "definitions": [
+            { "text": "Attractive or appealing", "correct": true },
+            { "text": "Related to winning games", "correct": false },
+            { "text": "Having wind-like qualities", "correct": false },
+            { "text": "Extremely unattractive", "correct": false }
+        ]
+    },
+    {
+        "word": "Xenophobic",
+        "definitions": [
+            { "text": "Having fear of foreigners", "correct": true },
+            { "text": "Related to X-ray technology", "correct": false },
+            { "text": "Having xerographic properties", "correct": false },
+            { "text": "Extremely welcoming", "correct": false }
+        ]
+    },
+    {
+        "word": "Yeoman",
+        "definitions": [
+            { "text": "A servant in a royal household", "correct": true },
+            { "text": "Related to yearly cycles", "correct": false },
+            { "text": "Having youthful appearance", "correct": false },
+            { "text": "Extremely old", "correct": false }
+        ]
+    },
+    {
+        "word": "Zephyr",
+        "definitions": [
+            { "text": "A gentle mild breeze", "correct": true },
+            { "text": "Related to zero temperature", "correct": false },
+            { "text": "Having zigzag patterns", "correct": false },
+            { "text": "Extremely strong wind", "correct": false }
+        ]
+    },
+    {
+        "word": "Abstruse",
+        "definitions": [
+            { "text": "Difficult to understand", "correct": true },
+            { "text": "Related to abstract art", "correct": false },
+            { "text": "Having abusive tendencies", "correct": false },
+            { "text": "Extremely simple", "correct": false }
+        ]
+    },
+    {
+        "word": "Beguile",
+        "definitions": [
+            { "text": "To charm or enchant deceptively", "correct": true },
+            { "text": "Related to beginning something", "correct": false },
+            { "text": "Having guilty feelings", "correct": false },
+            { "text": "To repel or disgust", "correct": false }
+        ]
+    },
+    {
+        "word": "Churlish",
+        "definitions": [
+            { "text": "Rude in a mean-spirited way", "correct": true },
+            { "text": "Related to church activities", "correct": false },
+            { "text": "Having childish behavior", "correct": false },
+            { "text": "Extremely polite", "correct": false }
+        ]
+    },
+    {
+        "word": "Doughty",
+        "definitions": [
+            { "text": "Brave and persistent", "correct": true },
+            { "text": "Related to bread dough", "correct": false },
+            { "text": "Having doubtful qualities", "correct": false },
+            { "text": "Extremely cowardly", "correct": false }
+        ]
+    },
+    {
+        "word": "Erudite",
+        "definitions": [
+            { "text": "Having great knowledge", "correct": true },
+            { "text": "Related to erupting volcanoes", "correct": false },
+            { "text": "Having crude behavior", "correct": false },
+            { "text": "Extremely ignorant", "correct": false }
+        ]
+    },
+    {
+        "word": "Fractious",
+        "definitions": [
+            { "text": "Irritable and quarrelsome", "correct": true },
+            { "text": "Related to mathematical fractions", "correct": false },
+            { "text": "Having fracture tendencies", "correct": false },
+            { "text": "Extremely peaceful", "correct": false }
+        ]
+    },
+    {
+        "word": "Grandiloquent",
+        "definitions": [
+            { "text": "Pompous in speech", "correct": true },
+            { "text": "Related to grand pianos", "correct": false },
+            { "text": "Having eloquent grandparents", "correct": false },
+            { "text": "Extremely modest", "correct": false }
+        ]
+    },
+    {
+        "word": "Hackneyed",
+        "definitions": [
+            { "text": "Lacking originality due to overuse", "correct": true },
+            { "text": "Related to horse-drawn carriages", "correct": false },
+            { "text": "Having hacking abilities", "correct": false },
+            { "text": "Extremely original", "correct": false }
+        ]
+    },
+    {
+        "word": "Ignominious",
+        "definitions": [
+            { "text": "Deserving public disgrace", "correct": true },
+            { "text": "Related to ignoring people", "correct": false },
+            { "text": "Having nominal value", "correct": false },
+            { "text": "Extremely honorable", "correct": false }
+        ]
+    },
+    {
+        "word": "Jettison",
+        "definitions": [
+            { "text": "To abandon or discard", "correct": true },
+            { "text": "Related to jet airplanes", "correct": false },
+            { "text": "Having prison qualities", "correct": false },
+            { "text": "To acquire or collect", "correct": false }
+        ]
+    },
+    {
+        "word": "Kvetch",
+        "definitions": [
+            { "text": "To complain persistently", "correct": true },
+            { "text": "Related to ketchup condiment", "correct": false },
+            { "text": "Having kitchen functions", "correct": false },
+            { "text": "To praise enthusiastically", "correct": false }
+        ]
+    },
+    {
+        "word": "Loquacious",
+        "definitions": [
+            { "text": "Very talkative", "correct": true },
+            { "text": "Related to location finding", "correct": false },
+            { "text": "Having locomotive qualities", "correct": false },
+            { "text": "Extremely quiet", "correct": false }
+        ]
+    },
+    {
+        "word": "Maverick",
+        "definitions": [
+            { "text": "An unorthodox person", "correct": true },
+            { "text": "Related to magic tricks", "correct": false },
+            { "text": "Having maverick cattle", "correct": false },
+            { "text": "Extremely conformist", "correct": false }
+        ]
+    },
+    {
+        "word": "Nascent",
+        "definitions": [
+            { "text": "Just coming into existence", "correct": true },
+            { "text": "Related to nasal passages", "correct": false },
+            { "text": "Having scent properties", "correct": false },
+            { "text": "Extremely mature", "correct": false }
+        ]
+    },
+    {
+        "word": "Ostentatious",
+        "definitions": [
+            { "text": "Designed to impress", "correct": true },
+            { "text": "Related to bone structure", "correct": false },
+            { "text": "Having ostrich qualities", "correct": false },
+            { "text": "Extremely modest", "correct": false }
+        ]
+    },
+    {
+        "word": "Parsimonious",
+        "definitions": [
+            { "text": "Extremely frugal", "correct": true },
+            { "text": "Related to parsing language", "correct": false },
+            { "text": "Having parsley flavoring", "correct": false },
+            { "text": "Extremely generous", "correct": false }
+        ]
+    },
+    {
+        "word": "Quotidian",
+        "definitions": [
+            { "text": "Occurring daily or ordinary", "correct": true },
+            { "text": "Related to quotation marks", "correct": false },
+            { "text": "Having quadrilateral shape", "correct": false },
+            { "text": "Extremely rare", "correct": false }
+        ]
+    },
+    {
+        "word": "Recondite",
+        "definitions": [
+            { "text": "Little known or abstruse", "correct": true },
+            { "text": "Related to recording devices", "correct": false },
+            { "text": "Having reconditioning needs", "correct": false },
+            { "text": "Extremely obvious", "correct": false }
+        ]
+    },
+    {
+        "word": "Salacious",
+        "definitions": [
+            { "text": "Having excessive interest in sex", "correct": true },
+            { "text": "Related to salary payments", "correct": false },
+            { "text": "Having salad properties", "correct": false },
+            { "text": "Extremely pure", "correct": false }
+        ]
+    },
+    {
+        "word": "Trepidation",
+        "definitions": [
+            { "text": "A feeling of fear or anxiety", "correct": true },
+            { "text": "Related to trapezoidal shapes", "correct": false },
+            { "text": "Having preparation qualities", "correct": false },
+            { "text": "Extreme confidence", "correct": false }
+        ]
+    },
+    {
+        "word": "Unctuous",
+        "definitions": [
+            { "text": "Excessively flattering", "correct": true },
+            { "text": "Related to cutting functions", "correct": false },
+            { "text": "Havingunctuous substances", "correct": false },
+            { "text": "Extremely sincere", "correct": false }
+        ]
+    },
+    {
+        "word": "Venerable",
+        "definitions": [
+            { "text": "Accorded great respect due to age", "correct": true },
+            { "text": "Related to venomous creatures", "correct": false },
+            { "text": "Having vulnerable qualities", "correct": false },
+            { "text": "Extremely disrespected", "correct": false }
+        ]
+    },
+    {
+        "word": "Wily",
+        "definitions": [
+            { "text": "Skilled in cunning or deception", "correct": true },
+            { "text": "Related to willow trees", "correct": false },
+            { "text": "Having wireless capabilities", "correct": false },
+            { "text": "Extremely honest", "correct": false }
+        ]
+    },
+    {
+        "word": "Xeric",
+        "definitions": [
+            { "text": "Of or adapted to dry conditions", "correct": true },
+            { "text": "Related to X-ray imaging", "correct": false },
+            { "text": "Having xerographic properties", "correct": false },
+            { "text": "Extremely wet", "correct": false }
+        ]
+    },
+    {
+        "word": "Yawp",
+        "definitions": [
+            { "text": "A harsh cry or yelp", "correct": true },
+            { "text": "Related to yawning behavior", "correct": false },
+            { "text": "Having yacht qualities", "correct": false },
+            { "text": "A gentle whisper", "correct": false }
+        ]
+    },
+    {
+        "word": "Zeitgeist",
+        "definitions": [
+            { "text": "The spirit of the times", "correct": true },
+            { "text": "Related to zigzag patterns", "correct": false },
+            { "text": "Having zero gravity", "correct": false },
+            { "text": "An individual spirit", "correct": false }
+        ]
+    }
+] 
