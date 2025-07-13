@@ -1282,3 +1282,52 @@ body {
         gap: 20px;
     }
 } 
+
+.privacy-content {
+    flex: 1;
+    padding: 20px 0;
+    overflow-y: auto;
+}
+
+.privacy-section {
+    background: linear-gradient(145deg, #2a2a2a, #1e1e1e);
+    border-radius: 15px;
+    padding: 25px;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.privacy-section h2 {
+    color: #4ecdc4;
+    font-size: 1.4rem;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.privacy-section p {
+    color: #e0e0e0;
+    line-height: 1.6;
+    margin-bottom: 12px;
+}
+
+.privacy-section ul {
+    color: #e0e0e0;
+    line-height: 1.6;
+    margin-left: 20px;
+    margin-bottom: 12px;
+}
+
+.privacy-section li {
+    margin-bottom: 8px;
+}
+
+@media (max-width: 480px) {
+    .privacy-section {
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+    .privacy-section h2 {
+        font-size: 1.2rem;
+    }
+} 
