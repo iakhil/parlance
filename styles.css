@@ -1265,6 +1265,57 @@ body {
     margin: 0;
 }
 
+/* App Store Section Styles */
+.app-store-section {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.app-store-text {
+    color: #888;
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+    font-weight: 500;
+}
+
+.app-store-badge {
+    display: inline-flex;
+    align-items: center;
+    background: linear-gradient(135deg, #000000, #333333);
+    color: #ffffff;
+    text-decoration: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.app-store-badge:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.app-store-badge:active {
+    transform: translateY(0);
+}
+
+.app-store-icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 12px;
+    color: #ffffff;
+}
+
+.app-store-badge .app-store-text {
+    color: #ffffff;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin: 0;
+    letter-spacing: 0.5px;
+}
+
 /* Responsive adjustments for support/copyright pages */
 @media (max-width: 480px) {
     .support-section,
@@ -1280,6 +1331,24 @@ body {
     
     .footer-links {
         gap: 20px;
+    }
+    
+    .app-store-section {
+        margin-top: 15px;
+    }
+    
+    .app-store-badge {
+        padding: 10px 16px;
+    }
+    
+    .app-store-icon {
+        width: 20px;
+        height: 20px;
+        margin-right: 10px;
+    }
+    
+    .app-store-badge .app-store-text {
+        font-size: 0.8rem;
     }
 } 
 

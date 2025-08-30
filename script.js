@@ -584,7 +584,32 @@ Card.prototype.createElement = function() {
 // Initialize the game when page loads
 document.addEventListener('DOMContentLoaded', () => {
     loadGameData(); // Load data first, then init game
+    
+    // Initialize App Store badge functionality
+    initAppStoreBadge();
 });
+
+// App Store Badge functionality
+function initAppStoreBadge() {
+    const appStoreBadge = document.getElementById('appStoreBadge');
+    if (appStoreBadge) {
+        appStoreBadge.addEventListener('click', (e) => {
+            e.preventDefault();
+            
+            // You can replace this URL with your actual App Store link
+            const appStoreUrl = 'https://apps.apple.com/us/app/play-parlance/id6748587583';
+            
+            // Open App Store in new tab
+            window.open(appStoreUrl, '_blank');
+            
+            // Add click feedback
+            appStoreBadge.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                appStoreBadge.style.transform = '';
+            }, 150);
+        });
+    }
+}
 
 // Add visual feedback for correct/incorrect answers
 function showFeedback(isCorrect) {
