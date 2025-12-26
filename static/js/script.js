@@ -200,7 +200,8 @@ class GameState {
         gameData[this.currentWordIndex].definitions = shuffleArray(gameData[this.currentWordIndex].definitions);
         
         // Show dictionary information for the completed word and save to learnt words
-        if (currentWord) {
+        // Skip in multiplayer mode - we want to continue immediately
+        if (currentWord && !multiplayerMode) {
             showDictionaryModalAndSave(currentWord);
         }
     }
@@ -2031,15 +2032,16 @@ handleSwipe = function(direction) {
     updateScoreDisplay();
     updateStatsDisplay();
     
-    // Handle card animation
-    if (currentCard) {
-        currentCard.classList.add(`swipe-${direction}`);
+    // Handle card animation - store reference to current card before it changes
+    const swipedCard = currentCard;
+    if (swipedCard) {
+        swipedCard.classList.add(`swipe-${direction}`);
         
+        // Remove the swiped card after animation
         setTimeout(() => {
-            if (currentCard && currentCard.parentNode) {
-                currentCard.parentNode.removeChild(currentCard);
+            if (swipedCard && swipedCard.parentNode) {
+                swipedCard.parentNode.removeChild(swipedCard);
             }
-            currentCard = null;
         }, 600);
     }
     
@@ -2054,11 +2056,12 @@ handleSwipe = function(direction) {
             // Finished all words - wait for server to end game
             game.isGameOver = true;
         } else {
+            // Create next card after animation completes
             setTimeout(() => {
                 if (!game.isGameOver) {
                     createCards();
                 }
-            }, 500);
+            }, 650);  // Wait for card animation to complete
         }
     } else {
         // Continue with next definition
@@ -2067,7 +2070,7 @@ handleSwipe = function(direction) {
             if (!game.isGameOver) {
                 createCards();
             }
-        }, 500);
+        }, 650);  // Wait for card animation to complete
     }
 };
 
