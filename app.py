@@ -1,3 +1,8 @@
+# Monkey-patch eventlet BEFORE importing anything else
+# This is REQUIRED for Flask-SocketIO to work with gunicorn+eventlet
+import eventlet
+eventlet.monkey_patch()
+
 from flask import Flask, render_template, jsonify, request
 from flask_cors import CORS
 from flask_socketio import SocketIO, emit, join_room, leave_room
@@ -13,17 +18,16 @@ from threading import Lock
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-secret-key-change-in-production')
 CORS(app)
-# Configure SocketIO for production (eventlet) and development (threading)
-# For Render/production: use eventlet with gunicorn
-# For local dev: can use threading
+
+# Configure SocketIO for production (eventlet) and development
 socketio = SocketIO(
     app, 
     cors_allowed_origins="*", 
-    async_mode='eventlet',  # Use eventlet for production with gunicorn
-    logger=False,  # Disable verbose logging in production
-    engineio_logger=False,
-    allow_upgrades=True,
-    transports=['websocket', 'polling']
+    async_mode='eventlet',
+    logger=True,
+    engineio_logger=True,
+    ping_timeout=60,
+    ping_interval=25
 )
 
 # Database connection
