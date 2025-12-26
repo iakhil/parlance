@@ -1686,12 +1686,17 @@ function initSocket() {
         return;
     }
     
+    // For Render/production, try polling first as WebSocket might not be supported
+    // Socket.IO will automatically upgrade to WebSocket if available
     socket = io({
         reconnection: true,
         reconnectionDelay: 1000,
         reconnectionAttempts: 5,
-        transports: ['websocket', 'polling'],  // Try websocket first, fallback to polling
-        timeout: 20000
+        transports: ['polling', 'websocket'],  // Try polling first, then upgrade to websocket
+        upgrade: true,
+        rememberUpgrade: true,
+        timeout: 20000,
+        forceNew: false
     });
     
     socket.on('connect_error', (error) => {

@@ -14,12 +14,16 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-secret-key-change-in-production')
 CORS(app)
 # Configure SocketIO for production (eventlet) and development (threading)
+# For Render/production: use eventlet with gunicorn
+# For local dev: can use threading
 socketio = SocketIO(
     app, 
     cors_allowed_origins="*", 
     async_mode='eventlet',  # Use eventlet for production with gunicorn
-    logger=True,
-    engineio_logger=True
+    logger=False,  # Disable verbose logging in production
+    engineio_logger=False,
+    allow_upgrades=True,
+    transports=['websocket', 'polling']
 )
 
 # Database connection
@@ -124,6 +128,10 @@ def calculate_score(is_correct, swipe_time_ms, streak):
 @app.route('/')
 def index():
     return render_template('index.html')
+
+@app.route('/health')
+def health():
+    return jsonify({'status': 'ok', 'socketio': 'enabled'}), 200
 
 @app.route('/static/<path:path>')
 def serve_static(path):
