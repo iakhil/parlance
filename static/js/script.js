@@ -75,10 +75,15 @@ const learntWordsManager = new LearntWordsManager();
 
 // Load game data from JSON file
 async function loadGameData() {
+    console.log('Loading game data...');
     try {
         const response = await fetch('/static/js/words-data.json');
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
         const data = await response.json();
         gameData = data;
+        console.log(`Loaded ${gameData.length} words`);
         
         // Shuffle the game data for variety
         gameData = shuffleArray(gameData);
@@ -110,6 +115,7 @@ async function loadGameData() {
                 ]
             }
         ];
+        console.log('Using fallback data');
         setTimeout(initGame, 500);
     }
 }
@@ -222,15 +228,18 @@ class GameState {
         this.incorrect++;
         this.streak = 0;
         showFeedback(false);
-        // Game ends on incorrect swipe in competitive mode
-        this.endGame();
+        // Game ends on incorrect swipe in competitive mode (single player only)
+        // In multiplayer, incorrect swipe just gives 0 points
+        if (!multiplayerMode) {
+            this.endGame();
+        }
     }
 }
 
 // Initialize game state
 const game = new GameState();
 
-// DOM Elements
+// DOM Elements - ensure they exist
 const currentWordEl = document.getElementById('currentWord');
 const cardStackEl = document.getElementById('cardStack');
 const scoreEl = document.getElementById('score');
@@ -244,6 +253,11 @@ const playAgainBtn = document.getElementById('playAgainBtn');
 const dictionaryModal = document.getElementById('dictionaryModal');
 const continueBtn = document.getElementById('continueBtn');
 
+// Check if essential DOM elements exist
+if (!currentWordEl || !cardStackEl || !scoreEl) {
+    console.error('Essential DOM elements not found. Make sure the HTML is loaded correctly.');
+}
+
 // Learnt Words DOM Elements
 const learntWordsBtn = document.getElementById('learntWordsBtn');
 const learntWordsModal = document.getElementById('learntWordsModal');
@@ -253,7 +267,7 @@ const learntWordsList = document.getElementById('learntWordsList');
 const clearWordsBtn = document.getElementById('clearWordsBtn');
 const backToGameBtn = document.getElementById('backToGameBtn');
 
-// Leaderboard DOM Elements
+// Leaderboard DOM Elements (may not exist in all versions)
 const leaderboardBtn = document.getElementById('leaderboardBtn');
 const leaderboardModal = document.getElementById('leaderboardModal');
 const closeLeaderboardBtn = document.getElementById('closeLeaderboardBtn');
@@ -262,7 +276,7 @@ const leaderboardList = document.getElementById('leaderboardList');
 const refreshLeaderboardBtn = document.getElementById('refreshLeaderboardBtn');
 const backFromLeaderboardBtn = document.getElementById('backFromLeaderboardBtn');
 
-// Score Submission DOM Elements
+// Score Submission DOM Elements (may not exist in all versions)
 const playerNameInput = document.getElementById('playerName');
 const submitScoreBtn = document.getElementById('submitScoreBtn');
 const finalWordsLearned = document.getElementById('finalWordsLearned');
@@ -459,6 +473,10 @@ function initGame() {
 }
 
 function updateWordDisplay() {
+    if (!currentWordEl) {
+        console.error('currentWordEl not found');
+        return;
+    }
     if (game.currentWordIndex < gameData.length && gameData.length > 0) {
         currentWordEl.textContent = gameData[game.currentWordIndex].word;
         currentWordEl.classList.remove('loading');
@@ -499,17 +517,26 @@ function createNextCard() {
 }
 
 function showGameOverModal() {
-    document.getElementById('finalScore').textContent = game.score;
-    document.getElementById('finalCorrect').textContent = game.correct;
-    document.getElementById('finalWordsLearned').textContent = game.wordsLearned;
-    document.getElementById('finalStreak').textContent = game.maxStreak;
+    const finalScoreEl = document.getElementById('finalScore');
+    const finalCorrectEl = document.getElementById('finalCorrect');
+    const finalWordsLearnedEl = document.getElementById('finalWordsLearned');
+    const finalStreakEl = document.getElementById('finalStreak');
     
-    // Reset score submission form
-    playerNameInput.value = '';
-    submitScoreBtn.disabled = false;
-    submitScoreBtn.textContent = 'Submit Score';
+    if (finalScoreEl) finalScoreEl.textContent = game.score;
+    if (finalCorrectEl) finalCorrectEl.textContent = game.correct;
+    if (finalWordsLearnedEl) finalWordsLearnedEl.textContent = game.wordsLearned;
+    if (finalStreakEl) finalStreakEl.textContent = game.maxStreak;
     
-    gameOverModal.classList.add('show');
+    // Reset score submission form (if elements exist)
+    if (playerNameInput) playerNameInput.value = '';
+    if (submitScoreBtn) {
+        submitScoreBtn.disabled = false;
+        submitScoreBtn.textContent = 'Submit Score';
+    }
+    
+    if (gameOverModal) {
+        gameOverModal.classList.add('show');
+    }
 }
 
 function hideGameOverModal() {
@@ -523,20 +550,33 @@ playAgainBtn.addEventListener('click', () => {
     initGame();
 });
 
-submitScoreBtn.addEventListener('click', handleScoreSubmission);
+// Score Submission Event Listeners (only if elements exist)
+if (submitScoreBtn) {
+    submitScoreBtn.addEventListener('click', handleScoreSubmission);
+}
 
 // Allow Enter key to submit score
-playerNameInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
-        handleScoreSubmission();
-    }
-});
+if (playerNameInput) {
+    playerNameInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            handleScoreSubmission();
+        }
+    });
+}
 
-// Leaderboard Event Listeners
-leaderboardBtn.addEventListener('click', showLeaderboardModal);
-closeLeaderboardBtn.addEventListener('click', hideLeaderboardModal);
-backFromLeaderboardBtn.addEventListener('click', hideLeaderboardModal);
-refreshLeaderboardBtn.addEventListener('click', loadLeaderboard);
+// Leaderboard Event Listeners (only if elements exist)
+if (leaderboardBtn) {
+    leaderboardBtn.addEventListener('click', showLeaderboardModal);
+}
+if (closeLeaderboardBtn) {
+    closeLeaderboardBtn.addEventListener('click', hideLeaderboardModal);
+}
+if (backFromLeaderboardBtn) {
+    backFromLeaderboardBtn.addEventListener('click', hideLeaderboardModal);
+}
+if (refreshLeaderboardBtn) {
+    refreshLeaderboardBtn.addEventListener('click', loadLeaderboard);
+}
 
 // Continue button (from dictionary modal)
 continueBtn.addEventListener('click', () => {
@@ -557,7 +597,7 @@ clearWordsBtn.addEventListener('click', () => {
 });
 
 // Close modals when clicking outside
-[gameOverModal, dictionaryModal, learntWordsModal, leaderboardModal].forEach(modal => {
+[gameOverModal, dictionaryModal, learntWordsModal, leaderboardModal].filter(m => m !== null).forEach(modal => {
     modal.addEventListener('click', (e) => {
         if (e.target === modal) {
             modal.classList.remove('show');
@@ -609,8 +649,13 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
-// Initialize the game
-loadGameData();
+// Initialize the game when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', loadGameData);
+} else {
+    // DOM is already ready
+    loadGameData();
+}
 
 // Add visual feedback for correct/incorrect answers
 function showFeedback(isCorrect) {
@@ -1072,6 +1117,11 @@ function hideLearntWordsModal() {
     learntWordsModal.classList.remove('show');
 }
 
+function updateLearntWordsCount() {
+    const learntWords = learntWordsManager.getLearntWords();
+    learntWordsCount.textContent = learntWords.length;
+}
+
 function updateLearntWordsDisplay() {
     const learntWords = learntWordsManager.getLearntWords();
     learntWordsCount.textContent = learntWords.length;
@@ -1222,6 +1272,11 @@ async function fetchStats() {
 
 // Score Submission Functions
 function handleScoreSubmission() {
+    if (!playerNameInput || !submitScoreBtn) {
+        console.warn('Score submission elements not found');
+        return;
+    }
+    
     const playerName = playerNameInput.value.trim();
     
     if (!playerName) {
@@ -1242,14 +1297,18 @@ function handleScoreSubmission() {
             alert(`Score submitted! You ranked #${result.rank}`);
             playerNameInput.value = '';
             hideGameOverModal();
-            showLeaderboardModal(); // Show leaderboard after submission
+            if (leaderboardModal) {
+                showLeaderboardModal(); // Show leaderboard after submission
+            }
         })
         .catch(error => {
             alert(`Failed to submit score: ${error.message}`);
         })
         .finally(() => {
-            submitScoreBtn.disabled = false;
-            submitScoreBtn.textContent = 'Submit Score';
+            if (submitScoreBtn) {
+                submitScoreBtn.disabled = false;
+                submitScoreBtn.textContent = 'Submit Score';
+            }
         });
 }
 
@@ -1568,4 +1627,447 @@ function initGame() {
     updateStatsDisplay();
     updateLearntWordsCount();
     createCards();
-} 
+}
+
+// ==================== MULTIPLAYER MODE ====================
+
+// Socket.IO connection
+let socket = null;
+let multiplayerMode = false;
+let currentRoomCode = null;
+let multiplayerGameState = {
+    words: [],
+    currentWordIndex: 0,
+    wordStartTime: null,
+    opponentScore: 0,
+    opponentWordIndex: 0,
+    opponentName: '',
+    isReady: false
+};
+
+// Multiplayer DOM Elements
+const multiplayerBtn = document.getElementById('multiplayerBtn');
+const multiplayerLobbyModal = document.getElementById('multiplayerLobbyModal');
+const multiplayerGameHeader = document.getElementById('multiplayerGameHeader');
+const multiplayerResultsModal = document.getElementById('multiplayerResultsModal');
+
+const createGameBtn = document.getElementById('createGameBtn');
+const joinGameBtn = document.getElementById('joinGameBtn');
+const createGameSection = document.getElementById('createGameSection');
+const joinGameSection = document.getElementById('joinGameSection');
+const readySection = document.getElementById('readySection');
+const roomCodeDisplay = document.getElementById('roomCodeDisplay');
+const roomCodeInput = document.getElementById('roomCodeInput');
+const multiplayerPlayerName = document.getElementById('multiplayerPlayerName');
+const joinRoomBtn = document.getElementById('joinRoomBtn');
+const readyBtn = document.getElementById('readyBtn');
+const opponentNameDisplay = document.getElementById('opponentNameDisplay');
+const opponentNameInGame = document.getElementById('opponentNameInGame');
+const opponentScore = document.getElementById('opponentScore');
+const opponentWordIndex = document.getElementById('opponentWordIndex');
+const connectionStatus = document.getElementById('connectionStatus');
+const connectionText = document.getElementById('connectionText');
+const statusDot = document.querySelector('.status-dot');
+
+const cancelCreateBtn = document.getElementById('cancelCreateBtn');
+const cancelJoinBtn = document.getElementById('cancelJoinBtn');
+const cancelReadyBtn = document.getElementById('cancelReadyBtn');
+const rematchBtn = document.getElementById('rematchBtn');
+const backToMenuBtn = document.getElementById('backToMenuBtn');
+const yourFinalScore = document.getElementById('yourFinalScore');
+const opponentFinalScore = document.getElementById('opponentFinalScore');
+const winnerAnnouncement = document.getElementById('winnerAnnouncement');
+const resultsTitle = document.getElementById('resultsTitle');
+const opponentResultLabel = document.getElementById('opponentResultLabel');
+
+// Initialize Socket.IO
+function initSocket() {
+    if (socket && socket.connected) {
+        return;
+    }
+    
+    socket = io({
+        reconnection: true,
+        reconnectionDelay: 1000,
+        reconnectionAttempts: 5
+    });
+    
+    socket.on('connect', () => {
+        console.log('Connected to server');
+        updateConnectionStatus(true);
+    });
+    
+    socket.on('disconnect', () => {
+        console.log('Disconnected from server');
+        updateConnectionStatus(false);
+        
+        // Attempt reconnection
+        if (multiplayerMode) {
+            setTimeout(() => {
+                if (!socket.connected) {
+                    initSocket();
+                }
+            }, 2000);
+        }
+    });
+    
+    socket.on('reconnect', () => {
+        console.log('Reconnected to server');
+        updateConnectionStatus(true);
+        
+        // Rejoin room if in multiplayer mode
+        if (multiplayerMode && currentRoomCode) {
+            // Room state should be maintained, but we may need to re-sync
+            socket.emit('rejoin_room', { room_code: currentRoomCode });
+        }
+    });
+    
+    socket.on('connected', (data) => {
+        console.log('Server connected:', data);
+    });
+    
+    socket.on('room_created', (data) => {
+        currentRoomCode = data.room_code;
+        roomCodeDisplay.textContent = data.room_code;
+        createGameSection.style.display = 'block';
+        document.getElementById('lobbyContent').style.display = 'none';
+    });
+    
+    socket.on('opponent_joined', (data) => {
+        multiplayerGameState.opponentName = data.opponent_name;
+        opponentNameDisplay.textContent = data.opponent_name;
+        opponentNameInGame.textContent = data.opponent_name;
+        opponentResultLabel.textContent = data.opponent_name;
+        document.getElementById('waitingText').textContent = `${data.opponent_name} joined! Click Ready when you're ready to start.`;
+        readySection.style.display = 'block';
+        createGameSection.style.display = 'none';
+    });
+    
+    socket.on('room_joined', (data) => {
+        currentRoomCode = data.room_code;
+        multiplayerGameState.opponentName = data.opponent_name;
+        opponentNameDisplay.textContent = data.opponent_name;
+        opponentNameInGame.textContent = data.opponent_name;
+        opponentResultLabel.textContent = data.opponent_name;
+        readySection.style.display = 'block';
+        joinGameSection.style.display = 'none';
+    });
+    
+    socket.on('join_error', (data) => {
+        alert(data.message || 'Failed to join game');
+    });
+    
+    socket.on('game_start', (data) => {
+        multiplayerGameState.words = data.words;
+        multiplayerGameState.opponentName = data.opponent_name;
+        opponentNameInGame.textContent = data.opponent_name;
+        startMultiplayerGame();
+    });
+    
+    socket.on('opponent_progress', (data) => {
+        multiplayerGameState.opponentScore = data.opponent_score;
+        multiplayerGameState.opponentWordIndex = data.opponent_word_index;
+        updateOpponentDisplay();
+        
+        if (data.opponent_finished) {
+            // Opponent finished, wait for player to finish
+        }
+    });
+    
+    socket.on('game_end', (data) => {
+        endMultiplayerGame(data);
+    });
+    
+    socket.on('opponent_disconnected', (data) => {
+        alert('Opponent disconnected. Returning to menu.');
+        exitMultiplayerMode();
+    });
+    
+    socket.on('swipe_confirmed', (data) => {
+        // Server confirmed the swipe
+        game.score = data.total_score;
+        updateScoreDisplay();
+    });
+    
+    socket.on('error', (data) => {
+        alert(data.message || 'An error occurred');
+    });
+}
+
+function updateConnectionStatus(connected) {
+    if (connected) {
+        connectionText.textContent = 'Connected';
+        statusDot.classList.remove('disconnected');
+    } else {
+        connectionText.textContent = 'Disconnected';
+        statusDot.classList.add('disconnected');
+    }
+}
+
+function updateOpponentDisplay() {
+    opponentScore.textContent = multiplayerGameState.opponentScore;
+    opponentWordIndex.textContent = multiplayerGameState.opponentWordIndex;
+}
+
+// Multiplayer Event Listeners
+multiplayerBtn.addEventListener('click', () => {
+    initSocket();
+    showMultiplayerLobby();
+});
+
+createGameBtn.addEventListener('click', () => {
+    const playerName = prompt('Enter your name:', 'Player') || 'Player';
+    socket.emit('create_game', { player_name: playerName });
+});
+
+joinGameBtn.addEventListener('click', () => {
+    joinGameSection.style.display = 'block';
+    document.getElementById('lobbyContent').style.display = 'none';
+});
+
+joinRoomBtn.addEventListener('click', () => {
+    const roomCode = roomCodeInput.value.trim().toUpperCase();
+    const playerName = multiplayerPlayerName.value.trim() || 'Player';
+    
+    if (roomCode.length !== 6) {
+        alert('Please enter a valid 6-character room code');
+        return;
+    }
+    
+    socket.emit('join_game', {
+        room_code: roomCode,
+        player_name: playerName
+    });
+});
+
+readyBtn.addEventListener('click', () => {
+    multiplayerGameState.isReady = true;
+    socket.emit('player_ready', { room_code: currentRoomCode });
+    readyBtn.disabled = true;
+    readyBtn.textContent = 'Waiting for opponent...';
+});
+
+cancelCreateBtn.addEventListener('click', () => {
+    exitMultiplayerMode();
+});
+
+cancelJoinBtn.addEventListener('click', () => {
+    joinGameSection.style.display = 'none';
+    document.getElementById('lobbyContent').style.display = 'block';
+    roomCodeInput.value = '';
+    multiplayerPlayerName.value = '';
+});
+
+cancelReadyBtn.addEventListener('click', () => {
+    exitMultiplayerMode();
+});
+
+rematchBtn.addEventListener('click', () => {
+    hideMultiplayerResults();
+    showMultiplayerLobby();
+});
+
+backToMenuBtn.addEventListener('click', () => {
+    exitMultiplayerMode();
+});
+
+function showMultiplayerLobby() {
+    multiplayerLobbyModal.classList.add('show');
+    document.getElementById('lobbyContent').style.display = 'block';
+    createGameSection.style.display = 'none';
+    joinGameSection.style.display = 'none';
+    readySection.style.display = 'none';
+}
+
+function hideMultiplayerLobby() {
+    multiplayerLobbyModal.classList.remove('show');
+}
+
+function startMultiplayerGame() {
+    multiplayerMode = true;
+    hideMultiplayerLobby();
+    multiplayerGameHeader.style.display = 'block';
+    
+    // Reset game state for multiplayer
+    game.reset();
+    game.isGameOver = false; // Ensure game is not over
+    multiplayerGameState.currentWordIndex = 0;
+    multiplayerGameState.wordStartTime = Date.now();
+    
+    // Use multiplayer words
+    gameData = multiplayerGameState.words;
+    game.currentWordIndex = 0;
+    game.currentDefinitionIndex = 0;
+    
+    // Shuffle definitions for each word
+    gameData.forEach(word => {
+        word.definitions = shuffleArray(word.definitions);
+    });
+    
+    updateWordDisplay();
+    updateScoreDisplay();
+    updateStatsDisplay();
+    updateOpponentDisplay();
+    createCards();
+}
+
+function endMultiplayerGame(data) {
+    multiplayerMode = false;
+    multiplayerGameHeader.style.display = 'none';
+    
+    yourFinalScore.textContent = data.your_score;
+    opponentFinalScore.textContent = data.opponent_score;
+    
+    if (data.is_tie) {
+        winnerAnnouncement.textContent = "It's a tie!";
+        winnerAnnouncement.style.color = '#ffd93d';
+    } else if (data.winner === multiplayerGameState.opponentName) {
+        winnerAnnouncement.textContent = `${data.winner} wins!`;
+        winnerAnnouncement.style.color = '#ff6b6b';
+    } else {
+        winnerAnnouncement.textContent = 'You win! 🎉';
+        winnerAnnouncement.style.color = '#4ecdc4';
+    }
+    
+    showMultiplayerResults();
+}
+
+function showMultiplayerResults() {
+    multiplayerResultsModal.classList.add('show');
+}
+
+function hideMultiplayerResults() {
+    multiplayerResultsModal.classList.remove('show');
+}
+
+function exitMultiplayerMode() {
+    multiplayerMode = false;
+    currentRoomCode = null;
+    multiplayerGameState = {
+        words: [],
+        currentWordIndex: 0,
+        wordStartTime: null,
+        opponentScore: 0,
+        opponentWordIndex: 0,
+        opponentName: '',
+        isReady: false
+    };
+    
+    hideMultiplayerLobby();
+    hideMultiplayerResults();
+    multiplayerGameHeader.style.display = 'none';
+    
+    // Reload game data for single player
+    loadGameData();
+}
+
+// Override swipe handling for multiplayer
+const originalHandleSwipe = handleSwipe;
+handleSwipe = function(direction) {
+    if (!multiplayerMode) {
+        originalHandleSwipe(direction);
+        return;
+    }
+    
+    // Multiplayer swipe handling
+    if (game.isGameOver || !currentCard) return;
+    
+    const currentWord = gameData[game.currentWordIndex];
+    const currentDefinition = currentWord.definitions[game.currentDefinitionIndex];
+    
+    if (!currentWord || !currentDefinition) {
+        return;
+    }
+    
+    const swipeTime = Date.now() - multiplayerGameState.wordStartTime;
+    const isCorrectSwipe = (direction === 'right' && currentDefinition.correct) || 
+                           (direction === 'left' && !currentDefinition.correct);
+    
+    // Calculate score locally for immediate feedback
+    const streak = game.streak;
+    let score = 0;
+    
+    if (isCorrectSwipe) {
+        const baseScore = 10;
+        const streakBonus = streak;
+        const speedBonus = Math.max(0, 20 - (swipeTime / 100));
+        score = baseScore + streakBonus + speedBonus;
+        
+        game.addCorrect();
+        game.addScore(score);
+    } else {
+        score = 0;
+        game.addIncorrect();
+        // In multiplayer, incorrect swipe doesn't end game, just gives 0 points
+    }
+    
+    // Send to server
+    socket.emit('swipe_action', {
+        room_code: currentRoomCode,
+        word_index: game.currentWordIndex,
+        definition_index: game.currentDefinitionIndex,
+        direction: direction,
+        swipe_time_ms: swipeTime,
+        is_correct: isCorrectSwipe
+    });
+    
+    // Update UI immediately (optimistic update)
+    updateScoreDisplay();
+    updateStatsDisplay();
+    
+    // Handle card animation
+    if (currentCard) {
+        currentCard.classList.add(`swipe-${direction}`);
+        
+        setTimeout(() => {
+            if (currentCard && currentCard.parentNode) {
+                currentCard.parentNode.removeChild(currentCard);
+            }
+            currentCard = null;
+        }, 600);
+    }
+    
+    // Move to next word/definition
+    if (isCorrectSwipe && currentDefinition.correct) {
+        // Correct swipe on correct definition - move to next word
+        game.nextWord();
+        multiplayerGameState.currentWordIndex++;
+        multiplayerGameState.wordStartTime = Date.now();
+        
+        if (multiplayerGameState.currentWordIndex >= multiplayerGameState.words.length) {
+            // Finished all words - wait for server to end game
+            game.isGameOver = true;
+        } else {
+            setTimeout(() => {
+                if (!game.isGameOver) {
+                    createCards();
+                }
+            }, 500);
+        }
+    } else {
+        // Continue with next definition
+        game.nextDefinition();
+        setTimeout(() => {
+            if (!game.isGameOver) {
+                createCards();
+            }
+        }, 500);
+    }
+};
+
+// Update word display to track word index in multiplayer
+const originalUpdateWordDisplay = updateWordDisplay;
+updateWordDisplay = function() {
+    if (multiplayerMode) {
+        if (game.currentWordIndex < gameData.length && gameData.length > 0) {
+            const wordIndex = multiplayerGameState.currentWordIndex + 1;
+            currentWordEl.textContent = `${gameData[game.currentWordIndex].word} (${wordIndex}/5)`;
+            currentWordEl.classList.remove('loading');
+        } else {
+            currentWordEl.textContent = "Loading...";
+            currentWordEl.classList.add('loading');
+        }
+    } else {
+        originalUpdateWordDisplay();
+    }
+}; 

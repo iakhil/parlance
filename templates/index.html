@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Parlance - Word Game</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="/static/css/styles.css">
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="favicon.png">
-    <link rel="shortcut icon" type="image/png" href="favicon.png">
-    <link rel="apple-touch-icon" href="favicon.png">
+    <link rel="icon" type="image/png" href="/static/favicon.png">
+    <link rel="shortcut icon" type="image/png" href="/static/favicon.png">
+    <link rel="apple-touch-icon" href="/static/favicon.png">
 </head>
 <body>
     <div class="game-container">
@@ -19,7 +19,10 @@
                 <span class="score-label">Score</span>
                 <span class="score" id="score">0</span>
             </div>
-            <button class="learnt-words-btn" id="learntWordsBtn">📚 Learnt Words</button>
+            <div class="header-buttons">
+                <button class="learnt-words-btn" id="learntWordsBtn">📚 Learnt Words</button>
+                <button class="multiplayer-btn" id="multiplayerBtn">⚔️ Multiplayer</button>
+            </div>
         </header>
 
         <!-- Game Area -->
@@ -95,6 +98,72 @@
             </div>
         </div>
 
+        <!-- Multiplayer Lobby Modal -->
+        <div class="modal" id="multiplayerLobbyModal">
+            <div class="modal-content multiplayer-modal">
+                <h2>⚔️ Multiplayer Challenge</h2>
+                <div id="lobbyContent">
+                    <div class="lobby-options">
+                        <button class="lobby-btn" id="createGameBtn">Create Game</button>
+                        <button class="lobby-btn" id="joinGameBtn">Join Game</button>
+                    </div>
+                </div>
+                <div id="createGameSection" style="display: none;">
+                    <p>Share this code with your friend:</p>
+                    <div class="room-code-display" id="roomCodeDisplay">----</div>
+                    <p class="waiting-text" id="waitingText">Waiting for opponent...</p>
+                    <button class="cancel-btn" id="cancelCreateBtn">Cancel</button>
+                </div>
+                <div id="joinGameSection" style="display: none;">
+                    <input type="text" class="room-code-input" id="roomCodeInput" placeholder="Enter room code" maxlength="6">
+                    <input type="text" class="player-name-input" id="multiplayerPlayerName" placeholder="Your name" maxlength="20">
+                    <button class="join-room-btn" id="joinRoomBtn">Join</button>
+                    <button class="cancel-btn" id="cancelJoinBtn">Cancel</button>
+                </div>
+                <div id="readySection" style="display: none;">
+                    <p>Opponent: <span id="opponentNameDisplay">---</span></p>
+                    <button class="ready-btn" id="readyBtn">Ready</button>
+                    <button class="cancel-btn" id="cancelReadyBtn">Cancel</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Multiplayer Game UI -->
+        <div class="multiplayer-game-header" id="multiplayerGameHeader" style="display: none;">
+            <div class="opponent-info">
+                <div class="opponent-name" id="opponentNameInGame">Opponent</div>
+                <div class="opponent-score">Score: <span id="opponentScore">0</span></div>
+                <div class="opponent-progress">Word: <span id="opponentWordIndex">0</span>/5</div>
+            </div>
+            <div class="connection-status" id="connectionStatus">
+                <span class="status-dot"></span>
+                <span id="connectionText">Connected</span>
+            </div>
+        </div>
+
+        <!-- Multiplayer Results Modal -->
+        <div class="modal" id="multiplayerResultsModal">
+            <div class="modal-content multiplayer-results-modal">
+                <h2 id="resultsTitle">Game Finished!</h2>
+                <div class="results-scores">
+                    <div class="player-result">
+                        <div class="result-label">You</div>
+                        <div class="result-score" id="yourFinalScore">0</div>
+                    </div>
+                    <div class="vs-divider">VS</div>
+                    <div class="player-result">
+                        <div class="result-label" id="opponentResultLabel">Opponent</div>
+                        <div class="result-score" id="opponentFinalScore">0</div>
+                    </div>
+                </div>
+                <div class="winner-announcement" id="winnerAnnouncement"></div>
+                <div class="results-actions">
+                    <button class="rematch-btn" id="rematchBtn">Rematch</button>
+                    <button class="back-to-menu-btn" id="backToMenuBtn">Back to Menu</button>
+                </div>
+            </div>
+        </div>
+
         <!-- Learnt Words Modal -->
         <div class="modal" id="learntWordsModal">
             <div class="modal-content learnt-words-modal">
@@ -116,6 +185,7 @@
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <script src="/static/js/script.js"></script>
 </body>
 </html> 
