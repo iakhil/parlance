@@ -13,7 +13,14 @@ from threading import Lock
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-secret-key-change-in-production')
 CORS(app)
-socketio = SocketIO(app, cors_allowed_origins="*", async_mode='threading')
+# Configure SocketIO for production (eventlet) and development (threading)
+socketio = SocketIO(
+    app, 
+    cors_allowed_origins="*", 
+    async_mode='eventlet',  # Use eventlet for production with gunicorn
+    logger=True,
+    engineio_logger=True
+)
 
 # Database connection
 def get_db_connection():

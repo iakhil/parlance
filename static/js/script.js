@@ -607,10 +607,10 @@ clearWordsBtn.addEventListener('click', () => {
 
 // Keyboard shortcuts
 document.addEventListener('keydown', (e) => {
-    if (gameOverModal.classList.contains('show') || 
-        dictionaryModal.classList.contains('show') || 
-        learntWordsModal.classList.contains('show') ||
-        leaderboardModal.classList.contains('show')) {
+    if ((gameOverModal && gameOverModal.classList.contains('show')) || 
+        (dictionaryModal && dictionaryModal.classList.contains('show')) || 
+        (learntWordsModal && learntWordsModal.classList.contains('show')) ||
+        (leaderboardModal && leaderboardModal.classList.contains('show'))) {
         return; // Don't handle game controls when modals are open
     }
 
@@ -1689,7 +1689,18 @@ function initSocket() {
     socket = io({
         reconnection: true,
         reconnectionDelay: 1000,
-        reconnectionAttempts: 5
+        reconnectionAttempts: 5,
+        transports: ['websocket', 'polling'],  // Try websocket first, fallback to polling
+        timeout: 20000
+    });
+    
+    socket.on('connect_error', (error) => {
+        console.error('Socket.IO connection error:', error);
+        updateConnectionStatus(false);
+        // Show user-friendly error message
+        if (multiplayerMode) {
+            alert('Unable to connect to multiplayer server. Please check your connection and try again.');
+        }
     });
     
     socket.on('connect', () => {
